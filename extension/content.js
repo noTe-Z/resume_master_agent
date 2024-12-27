@@ -124,7 +124,7 @@ function createSaveButton() {
             // Get job details
             const titleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title h1');
             const companyElement = document.querySelector('.job-details-jobs-unified-top-card__company-name');
-            const descriptionElement = document.querySelector('.jobs-description-content__text');
+            const descriptionElement = document.querySelector('.jobs-description__content, .jobs-description, .jobs-unified-top-card__description');
             
             if (!titleElement || !companyElement) {
                 console.error('Could not find required job elements');
