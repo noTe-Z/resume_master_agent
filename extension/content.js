@@ -53,157 +53,116 @@ function getApplicationUrl() {
 }
 
 function createSaveButton() {
-    // Remove any existing save buttons
-    const existingSaveButtons = document.querySelectorAll('.linkedin-job-saver-btn');
-    existingSaveButtons.forEach(btn => btn.remove());
-
-    // Create new save button
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save Job';
-    saveButton.className = 'linkedin-job-saver-btn artdeco-button artdeco-button--2 artdeco-button--primary';
-    saveButton.style.marginRight = '8px';
-
-    // Add click event listener
-    saveButton.addEventListener('click', async () => {
+    // Create button
+    const button = document.createElement('button');
+    button.textContent = 'Save Job';
+    button.style.cssText = `
+        background-color: #0a66c2;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        padding: 6px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 12px;
+    `;
+    
+    // Add hover effect
+    button.addEventListener('mouseenter', () => {
+        button.style.backgroundColor = '#004182';
+    });
+    button.addEventListener('mouseleave', () => {
+        button.style.backgroundColor = '#0a66c2';
+    });
+    
+    // Add click handler
+    button.addEventListener('click', async () => {
         try {
-            // Get job title
-            const titleElement = document.querySelector('h1.job-details-jobs-unified-top-card__job-title, h1.t-24, .jobs-unified-top-card__job-title');
-            if (!titleElement) {
-                throw new Error('Could not find job title');
+            // Get job details
+            const titleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title h1');
+            const companyElement = document.querySelector('.job-details-jobs-unified-top-card__company-name');
+            const descriptionElement = document.querySelector('.jobs-description-content__text');
+            
+            // Get application link from the job title's anchor tag
+            const titleAnchor = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a');
+            const applyLink = titleAnchor ? 'https://www.linkedin.com' + titleAnchor.getAttribute('href') : null;
+            
+            if (!titleElement || !companyElement) {
+                console.error('Could not find required job elements');
+                return;
             }
-            const title = titleElement.textContent.trim();
-
-            // Get company name
-            const companyElement = document.querySelector('.job-details-jobs-unified-top-card__company-name a, .jobs-unified-top-card__company-name a, .jobs-unified-top-card__company-name');
-            const company = companyElement ? companyElement.textContent.trim() : '';
-
-            // Get job description
-            const descriptionElement = document.querySelector('.jobs-description__content, .jobs-description, .jobs-unified-top-card__description');
-            const description = descriptionElement ? descriptionElement.textContent.trim() : '';
-
-            // Get current URL
-            const url = window.location.href;
-
-            // Get application URL
-            const applyLink = await getApplicationUrl();
-
-            console.log('Extracted job details:', {
-                title,
-                company,
-                description: description.substring(0, 100) + '...',
-                applyLink
-            });
-
-            // Prepare job data
+            
             const jobData = {
-                title: title,
-                company: company,
-                url: url,
-                description: description,
-                applyLink: applyLink
+                title: titleElement.textContent.trim(),
+                company: companyElement.textContent.trim(),
+                description: descriptionElement ? descriptionElement.textContent.trim() : '',
+                apply_link: applyLink
             };
-
-            // Send data to backend
+            
+            // Save job
             const response = await fetch('http://localhost:3000/save-job', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(jobData)
             });
-
-            const result = await response.json();
-            console.log('Server response:', result);
-
-            // Update button to show success/error
-            if (response.ok) {
-                saveButton.textContent = 'Saved!';
-                saveButton.style.backgroundColor = '#057642';
-            setTimeout(() => {
-                    saveButton.textContent = 'Save Job';
-                saveButton.style.backgroundColor = '';
-            }, 2000);
-            } else {
-                throw new Error(result.error || 'Failed to save job');
+            
+            if (!response.ok) {
+                throw new Error('Failed to save job');
             }
+            
+            // Update button to show success
+            button.textContent = 'Saved!';
+            button.style.backgroundColor = '#057642';
+            setTimeout(() => {
+                button.textContent = 'Save Job';
+                button.style.backgroundColor = '#0a66c2';
+            }, 2000);
+            
         } catch (error) {
             console.error('Error saving job:', error);
-            saveButton.textContent = 'Error!';
-            saveButton.style.backgroundColor = '#d11124';
+            button.textContent = 'Error!';
+            button.style.backgroundColor = '#cc1016';
             setTimeout(() => {
-                saveButton.textContent = 'Save Job';
-                saveButton.style.backgroundColor = '';
+                button.textContent = 'Save Job';
+                button.style.backgroundColor = '#0a66c2';
             }, 2000);
         }
     });
-
-    return saveButton;
+    
+    return button;
 }
 
-async function insertSaveButton() {
-    try {
-        // Try different selectors for the button container
-        const containerSelectors = [
-            '.jobs-unified-top-card__actions',
-            '.jobs-s-apply',
-            '.jobs-unified-top-card__button-container',
-            '.jobs-unified-top-card__actions-container',
-            '.jobs-details-top-card__actions-container'
-        ];
-
-        let container = null;
-        for (const selector of containerSelectors) {
-            container = await waitForElement(selector).catch(() => null);
-            if (container) break;
-        }
-
-        if (!container) {
-            console.error('Could not find button container');
-            return;
-        }
-
-        const saveButton = createSaveButton();
-        container.insertBefore(saveButton, container.firstChild);
-        console.log('Save button inserted successfully');
-    } catch (error) {
-        console.error('Error inserting save button:', error);
+function insertSaveButton() {
+    // Find the job title container
+    const titleContainer = document.querySelector('.job-details-jobs-unified-top-card__job-title');
+    if (!titleContainer) {
+        console.error('Could not find job title container');
+        return;
     }
+    
+    // Check if button already exists
+    if (titleContainer.querySelector('button[data-purpose="save-job"]')) {
+        return;
+    }
+    
+    // Create and insert button
+    const saveButton = createSaveButton();
+    saveButton.setAttribute('data-purpose', 'save-job');
+    titleContainer.appendChild(saveButton);
 }
 
-// Initial button creation with retry
-insertSaveButton();
+// Initial insertion
+setTimeout(insertSaveButton, 1000);
 
-// Create an observer to watch for changes in the job details section
-const observer = new MutationObserver((mutations) => {
-    // Check if our button exists
-    if (!document.querySelector('.linkedin-job-saver-btn')) {
-        insertSaveButton();
+// Watch for URL changes (LinkedIn uses client-side routing)
+let lastUrl = location.href;
+new MutationObserver(() => {
+    const url = location.href;
+    if (url !== lastUrl) {
+        lastUrl = url;
+        setTimeout(insertSaveButton, 1000);
     }
-});
-
-// Start observing the main content area for SPA navigation
-const mainContent = document.querySelector('#main-content, #main, .jobs-search__job-details');
-if (mainContent) {
-    observer.observe(mainContent, { 
-        childList: true,
-        subtree: true,
-        attributes: true,
-        characterData: true
-    });
-    console.log('Started observing main content');
-} else {
-    console.log('Main content not found, will retry observation');
-    setTimeout(() => {
-        const retryContent = document.querySelector('#main-content, #main, .jobs-search__job-details');
-        if (retryContent) {
-            observer.observe(retryContent, { 
-                childList: true, 
-                subtree: true,
-                attributes: true,
-                characterData: true
-            });
-            console.log('Started observing main content after retry');
-        }
-    }, 2000);
-} 
+}).observe(document, { subtree: true, childList: true }); 
