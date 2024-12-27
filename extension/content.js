@@ -24,10 +24,38 @@ function waitForElement(selector, maxAttempts = 10, interval = 1000) {
 
 function getApplicationUrl() {
     return new Promise((resolve) => {
-        // Try to find the apply button
-        const applyButton = document.querySelector('.jobs-apply-button, .jobs-unified-top-card__apply-button, [data-control-name="jobdetails_topcard_inapply"]');
+        // Try to find the apply button with various selectors
+        const applyButtonSelectors = [
+            '.jobs-apply-button',
+            '.jobs-unified-top-card__apply-button',
+            '[data-control-name="jobdetails_topcard_inapply"]',
+            '.jobs-apply-button--top-card',
+            '.jobs-s-apply button',
+            '.jobs-apply-button__text'
+        ];
+
+        let applyButton = null;
+        for (const selector of applyButtonSelectors) {
+            applyButton = document.querySelector(selector);
+            if (applyButton) break;
+        }
+
         if (!applyButton) {
-            console.log('Apply button not found');
+            console.log('Apply button not found, trying alternative methods');
+            // Try to get the URL from the job title link
+            const titleLink = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a');
+            if (titleLink) {
+                const href = titleLink.getAttribute('href');
+                if (href) {
+                    const absoluteUrl = href.startsWith('http') ? href : new URL(href, window.location.origin).href;
+                    console.log('Found apply URL from title link:', absoluteUrl);
+                    resolve(absoluteUrl);
+                    return;
+                }
+            }
+            
+            // If all else fails, use the current page URL
+            console.log('No apply URL found, using current page URL');
             resolve(window.location.href);
             return;
         }
@@ -40,13 +68,27 @@ function getApplicationUrl() {
                         applyButton.dataset.jobUrl;
 
         if (applyUrl) {
-            console.log('Found apply URL:', applyUrl);
+            console.log('Found apply URL from button:', applyUrl);
             // If the URL is relative, make it absolute
             const absoluteUrl = applyUrl.startsWith('http') ? applyUrl : new URL(applyUrl, window.location.origin).href;
             resolve(absoluteUrl);
         } else {
-            // If we can't find the URL, use the current page URL
-            console.log('No apply URL found, using current page URL');
+            // If we can't find the URL in the button, try to get it from the parent element
+            const parentElement = applyButton.closest('a, button');
+            if (parentElement) {
+                const parentUrl = parentElement.getAttribute('href') ||
+                                parentElement.getAttribute('data-apply-url') ||
+                                parentElement.getAttribute('data-job-url');
+                if (parentUrl) {
+                    console.log('Found apply URL from parent element:', parentUrl);
+                    const absoluteUrl = parentUrl.startsWith('http') ? parentUrl : new URL(parentUrl, window.location.origin).href;
+                    resolve(absoluteUrl);
+                    return;
+                }
+            }
+            
+            // If we still can't find the URL, use the current page URL
+            console.log('No apply URL found in button, using current page URL');
             resolve(window.location.href);
         }
     });
@@ -84,14 +126,14 @@ function createSaveButton() {
             const companyElement = document.querySelector('.job-details-jobs-unified-top-card__company-name');
             const descriptionElement = document.querySelector('.jobs-description-content__text');
             
-            // Get application link from the job title's anchor tag
-            const titleAnchor = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a');
-            const applyLink = titleAnchor ? 'https://www.linkedin.com' + titleAnchor.getAttribute('href') : null;
-            
             if (!titleElement || !companyElement) {
                 console.error('Could not find required job elements');
                 return;
             }
+
+            // Get application URL using the existing function
+            const applyLink = await getApplicationUrl();
+            console.log('Application URL:', applyLink);
             
             const jobData = {
                 title: titleElement.textContent.trim(),
@@ -99,6 +141,8 @@ function createSaveButton() {
                 description: descriptionElement ? descriptionElement.textContent.trim() : '',
                 apply_link: applyLink
             };
+
+            console.log('Sending job data:', jobData);
             
             // Save job
             const response = await fetch('http://localhost:3000/save-job', {
