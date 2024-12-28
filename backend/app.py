@@ -15,10 +15,9 @@ def get_db():
 
 def init_db():
     with get_db() as db:
-        # Drop existing jobs table if it exists to ensure clean schema
-        db.execute('DROP TABLE IF EXISTS jobs')
+        # Only create table if it doesn't exist
         db.execute('''
-            CREATE TABLE jobs (
+            CREATE TABLE IF NOT EXISTS jobs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 company TEXT NOT NULL,
@@ -29,6 +28,17 @@ def init_db():
                 applied_at TIMESTAMP
             )
         ''')
+        
+        # Check if we need to add the applied_at column (for backward compatibility)
+        columns = db.execute("PRAGMA table_info(jobs)").fetchall()
+        column_names = [col[1] for col in columns]
+        
+        if 'applied_at' not in column_names:
+            db.execute('ALTER TABLE jobs ADD COLUMN applied_at TIMESTAMP')
+            
+        if 'status' not in column_names:
+            db.execute('ALTER TABLE jobs ADD COLUMN status TEXT DEFAULT "to_apply"')
+            
         db.commit()
 
 def get_status_counts():
