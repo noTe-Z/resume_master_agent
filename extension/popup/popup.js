@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const jobList = document.getElementById('jobList');
     
+    // Add event listener for "View All Jobs" button
+    document.getElementById('viewAllJobs').addEventListener('click', () => {
+        chrome.tabs.create({ url: chrome.runtime.getURL('popup/jobs.html') });
+    });
+    
+    // Update daily goal progress
+    await updateDailyGoal();
+    
     try {
         const response = await fetch('http://localhost:3000/get-jobs');
         const data = await response.json();
@@ -47,6 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (jobList.children.length === 0) {
                             jobList.innerHTML = '<p class="no-jobs">No saved jobs yet.</p>';
                         }
+                        // Update goal progress after deletion
+                        await updateDailyGoal();
                     } else {
                         throw new Error('Failed to delete job');
                     }
@@ -64,4 +74,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error fetching jobs:', error);
         jobList.innerHTML = '<p class="error">Failed to load saved jobs.</p>';
     }
-}); 
+});
+
+async function updateDailyGoal() {
+    try {
+        const response = await fetch('http://localhost:3000/jobs/today-stats');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const stats = await response.json();
+        
+        // Update progress count
+        document.getElementById('todayProgress').textContent = stats.today_applied;
+        
+        // Update status message
+        const goalStatus = document.getElementById('goalStatus');
+        if (stats.goal_met) {
+            goalStatus.textContent = '🎉 Daily goal achieved!';
+            goalStatus.className = 'goal-status met';
+        } else {
+            const remaining = stats.daily_goal - stats.today_applied;
+            goalStatus.textContent = `${remaining} more to reach today's goal`;
+            goalStatus.className = 'goal-status not-met';
+        }
+    } catch (error) {
+        console.error('Error updating daily goal:', error);
+        document.getElementById('goalStatus').textContent = 'Error loading goal progress';
+    }
+} 

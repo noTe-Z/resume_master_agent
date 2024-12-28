@@ -59,5 +59,94 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - For search results, ensure proper handling of different character encodings (UTF-8) for international queries
 - Add debug information to stderr while keeping the main output clean in stdout for better pipeline integration
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
+- When improving one part of code, be careful not to break working functionality in other parts (e.g., keep working selectors while adding new features)
+- Use multiple selectors and fallback methods when scraping web elements to improve reliability
+- When tracking timestamps in a database, ensure proper handling of NULL values and status changes (e.g., clearing timestamps when reverting status)
+- Always validate database constraints and handle edge cases in status transitions
+- Keep UI state in sync with backend state changes by updating relevant components after status updates
 
 # Scratchpad
+
+Current Task: Job Application Management System Development
+
+Project Objective:
+Build an integrated system to streamline the job application process by:
+1. Tracking job applications and their statuses
+2. Automating resume tailoring using AI
+3. Managing application progress and follow-ups
+4. Collecting job posting data and application links
+5. Providing insights and analytics on application process
+
+Current Progress:
+[X] Set up project infrastructure (Git, Python environment)
+[X] Implement browser extension for LinkedIn job scraping
+[X] Create basic job data collection functionality
+[X] Implement application link detection
+[X] Set up backend API structure
+[X] Create jobs display page with status management
+[X] Implement daily application goal tracking (10 applications/day)
+[X] Fix applied_at timestamp handling for status changes
+
+Recent Achievements:
+1. Created comprehensive jobs management page with:
+   - Company name, job title, and application link display
+   - Status management (to_apply, applied, interviewing)
+   - Error handling and data validation
+
+2. Implemented daily goal tracking:
+   - Display of current progress (X/10)
+   - Visual feedback on goal status
+   - Real-time updates
+
+3. Fixed database issues:
+   - Added proper timestamp handling for applied status
+   - Implemented NULL handling for applied_at field
+   - Added proper status constraints and validation
+
+Next Steps:
+1. Resume Management & AI Tailoring
+[ ] Create master resume template structure
+[ ] Implement resume parsing and section extraction
+[ ] Develop AI-powered resume tailoring system
+[ ] Add version control for different resume versions
+[ ] Implement resume formatting and export
+
+2. Application Tracking System
+[X] Design and implement application status workflow
+[X] Create job application database schema
+[X] Implement status update mechanisms
+[ ] Add reminder and follow-up system
+[ ] Create application timeline visualization
+
+3. Job Search Enhancement
+[ ] Expand job source beyond LinkedIn
+[ ] Implement advanced job filtering
+[ ] Add job requirement analysis
+[ ] Create job matching score system
+[ ] Implement saved search functionality
+
+4. AI Integration & Analytics
+[ ] Implement AI-powered job description analysis
+[ ] Create skill gap analysis system
+[ ] Add application success prediction
+[ ] Implement interview preparation suggestions
+[ ] Create analytics dashboard for application insights
+
+5. User Experience & Interface
+[X] Design and implement main dashboard
+[X] Create intuitive application management interface
+[ ] Add document management system
+[ ] Implement notification system
+[ ] Create mobile-responsive design
+
+Technical Debt & Infrastructure:
+[ ] Improve error handling and logging
+[ ] Add comprehensive test coverage
+[ ] Implement data backup system
+[ ] Add user authentication
+[ ] Create deployment pipeline
+
+Current Focus:
+- Completing the resume management system
+- Enhancing job data collection reliability
+- Implementing basic application tracking functionality

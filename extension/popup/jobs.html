@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Saved Jobs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="jobs.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Saved Jobs</h1>
+        <div class="stats-container">
+            <div class="stats">
+                <span class="stat-item">
+                    <span class="stat-label">Total Jobs:</span>
+                    <span id="totalJobs" class="stat-value">0</span>
+                </span>
+                <span class="stat-item">
+                    <span class="stat-label">Applied:</span>
+                    <span id="appliedJobs" class="stat-value">0</span>
+                </span>
+                <span class="stat-item">
+                    <span class="stat-label">To Apply:</span>
+                    <span id="toApplyJobs" class="stat-value">0</span>
+                </span>
+                <span class="stat-item">
+                    <span class="stat-label">Interviewing:</span>
+                    <span id="interviewingJobs" class="stat-value">0</span>
+                </span>
+            </div>
+        </div>
+        <div class="table-container">
+            <table id="jobsTable">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Application Link</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="jobsTableBody">
+                    <!-- Jobs will be populated here dynamically -->
+                </tbody>
+            </table>
+        </div>
+        <div id="noJobs" class="hidden">
+            No saved jobs found.
+        </div>
+    </div>
+    <script src="jobs.js"></script>
+</body>
+</html> 

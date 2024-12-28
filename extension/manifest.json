@@ -6,11 +6,13 @@
   "permissions": [
     "activeTab",
     "storage",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "host_permissions": [
     "https://www.linkedin.com/*",
-    "http://localhost:3000/*"
+    "http://localhost:3000/*",
+    "http://localhost:5000/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",
@@ -31,7 +33,12 @@
     "service_worker": "background.js"
   },
   "web_accessible_resources": [{
-    "resources": ["icon.png"],
+    "resources": [
+      "icon.png",
+      "popup/jobs.html",
+      "popup/jobs.js",
+      "popup/jobs.css"
+    ],
     "matches": ["https://www.linkedin.com/*"]
   }]
 } 

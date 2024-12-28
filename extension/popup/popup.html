@@ -5,7 +5,19 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Saved Jobs</h2>
+    <div class="header">
+        <h2>Saved Jobs</h2>
+        <div class="daily-goal">
+            <div class="goal-progress">
+                <span class="goal-label">Today's Applications:</span>
+                <span id="todayProgress" class="goal-count">0</span>
+                <span class="goal-separator">/</span>
+                <span class="goal-target">10</span>
+            </div>
+            <div id="goalStatus" class="goal-status"></div>
+        </div>
+        <button id="viewAllJobs" class="view-all-button">View All Jobs</button>
+    </div>
     <div id="jobList">
         <div class="job-card">Loading...</div>
     </div>
