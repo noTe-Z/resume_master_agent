@@ -2,7 +2,7 @@
 
 During you interaction with the user, if you find anything reusable in this project (e.g. version of a library, model name), especially about a fix to a mistake you made or a correction you received, you should take note in the `Lessons` section in the `.cursorrules` file so you will not make the same mistake again. 
 
-You should also use the `.cursorrules` file as a scratchpad to organize your thoughts. Especially when you receive a new task, you should first review the content of the scratchpad, clear old different task if necessary, first explain the task, and plan the steps you need to take to complete the task. You can use todo markers to indicate the progress, e.g.
+You should also use the `.cursorrules` file as a scratchpad to organize your thoughts. Especially when you receive a new task, you should first review the content of the scratchpad, first explain the task, and plan the steps you need to take to complete the task. You should not modify other parts of the scratchpad unless I tell you to. You can use todo markers to indicate the progress, e.g.
 [X] Task 1
 [ ] Task 2
 Also update the progress of the task in the Scratchpad when you finish a subtask.
@@ -86,26 +86,31 @@ Current Progress:
 [X] Create jobs display page with status management
 [X] Implement daily application goal tracking (10 applications/day)
 [X] Fix applied_at timestamp handling for status changes
+[X] Create master resume LaTeX template
+[X] Implement job saving functionality
+[X] Add comprehensive job management interface
 
 Recent Achievements:
-1. Created comprehensive jobs management page with:
-   - Company name, job title, and application link display
-   - Status management (to_apply, applied, interviewing)
-   - Error handling and data validation
+1. Enhanced Browser Extension:
+   - Added real-time job saving functionality
+   - Implemented status management system
+   - Created comprehensive jobs listing interface
+   - Added daily goal tracking with visual feedback
 
-2. Implemented daily goal tracking:
-   - Display of current progress (X/10)
-   - Visual feedback on goal status
-   - Real-time updates
+2. Backend Development:
+   - Implemented robust job data storage
+   - Added status management API
+   - Created timestamp handling system
+   - Set up error handling and validation
 
-3. Fixed database issues:
-   - Added proper timestamp handling for applied status
-   - Implemented NULL handling for applied_at field
-   - Added proper status constraints and validation
+3. Resume System:
+   - Created master resume LaTeX template
+   - Set up basic section structure
+   - Added support for multiple formats
 
 Next Steps:
 1. Resume Management & AI Tailoring
-[ ] Create master resume template structure
+[X] Create master resume template structure
 [ ] Implement resume parsing and section extraction
 [ ] Develop AI-powered resume tailoring system
 [ ] Add version control for different resume versions
@@ -147,6 +152,6 @@ Technical Debt & Infrastructure:
 [ ] Create deployment pipeline
 
 Current Focus:
-- Completing the resume management system
-- Enhancing job data collection reliability
-- Implementing basic application tracking functionality
+- Implementing AI-powered resume tailoring system
+- Developing job requirement analysis functionality
+- Adding reminder and follow-up system

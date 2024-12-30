@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tailored Resume</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .split-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+        
+        .split-pane {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+        
+        .job-description {
+            background-color: #f8f9fa;
+        }
+        
+        .tailored-resume {
+            background-color: #fff;
+        }
+        
+        h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="split-container">
+        <div class="split-pane job-description">
+            <h2>Job Description</h2>
+            <pre id="jobDescription"></pre>
+        </div>
+        <div class="split-pane tailored-resume">
+            <h2>Tailored Resume</h2>
+            <pre id="tailoredResume"></pre>
+        </div>
+    </div>
+    <script src="tailored-resume.js"></script>
+</body>
+</html> 

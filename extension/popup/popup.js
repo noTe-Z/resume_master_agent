@@ -11,29 +11,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     try {
         const response = await fetch('http://localhost:3000/get-jobs');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         
-        if (data.length === 0) {
+        // Ensure data is an array
+        const jobs = Array.isArray(data) ? data : [];
+        
+        if (jobs.length === 0) {
             jobList.innerHTML = '<p class="no-jobs">No saved jobs yet.</p>';
             return;
         }
         
-        jobList.innerHTML = data.map(job => `
+        jobList.innerHTML = jobs.map(job => `
             <div class="job-card">
                 <div class="job-header">
-                    <h3 class="job-title">${job.title}</h3>
-                    ${job.company ? `<p class="company-name">${job.company}</p>` : ''}
+                    <h3 class="job-title">${escapeHtml(job.title || '')}</h3>
+                    ${job.company ? `<p class="company-name">${escapeHtml(job.company)}</p>` : ''}
                 </div>
                 ${job.description ? `
                     <div class="job-description">
-                        <p>${job.description.substring(0, 200)}${job.description.length > 200 ? '...' : ''}</p>
+                        <p>${escapeHtml(job.description.substring(0, 200))}${job.description.length > 200 ? '...' : ''}</p>
                     </div>
                 ` : ''}
                 <div class="job-actions">
                     ${job.apply_link ? `
-                        <a href="${job.apply_link}" target="_blank" class="action-button apply">Apply Now</a>
+                        <a href="${escapeHtml(job.apply_link)}" target="_blank" class="action-button apply">Apply Now</a>
                     ` : ''}
-                    <button class="action-button delete" data-job-id="${job.id}">Delete</button>
+                    <button class="action-button delete" data-job-id="${escapeHtml(job.id)}">Delete</button>
                 </div>
                 <div class="job-meta">
                     <span class="saved-time">Saved: ${new Date(job.saved_at).toLocaleString()}</span>
@@ -100,5 +106,18 @@ async function updateDailyGoal() {
     } catch (error) {
         console.error('Error updating daily goal:', error);
         document.getElementById('goalStatus').textContent = 'Error loading goal progress';
+        document.getElementById('todayProgress').textContent = '0';
     }
+}
+
+// Helper function to escape HTML to prevent XSS
+function escapeHtml(unsafe) {
+    if (unsafe === null || unsafe === undefined) return '';
+    return unsafe
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 } 
