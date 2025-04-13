@@ -34,4 +34,18 @@ wheels/
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Specific files
+.cursorrules
+scratchpad.md
+.windsurfrules
+console_log.log
+LinkedIn.html
+test_jobs.db
+project-structure
+
+# Cache/Logs/Config
+.pytest_cache/
+logs/
+.devcontainer/ 
