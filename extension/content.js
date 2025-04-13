@@ -121,13 +121,66 @@ function createSaveButton() {
     // Add click handler
     button.addEventListener('click', async () => {
         try {
-            // Get job details
-            const titleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title h1');
-            const companyElement = document.querySelector('.job-details-jobs-unified-top-card__company-name');
-            const descriptionElement = document.querySelector('.jobs-description__content, .jobs-description, .jobs-unified-top-card__description');
+            // Get job details with multiple selectors for each element
+            let titleElement = null;
+            const titleSelectors = [
+                '.job-details-jobs-unified-top-card__job-title h1',
+                '.jobs-unified-top-card__job-title h1',
+                '.jobs-unified-top-card__title h1',
+                '.jobs-search__job-details--title h1',
+                '.jobs-details-top-card__title-container h1',
+                '.jobs-unified-top-card h1',
+                'h1.job-title'
+            ];
+            
+            for (const selector of titleSelectors) {
+                titleElement = document.querySelector(selector);
+                if (titleElement) break;
+            }
+            
+            // Fallback: try to find any h1 element within the job details section
+            if (!titleElement) {
+                const jobDetailsSection = document.querySelector('.jobs-unified-top-card, .job-view-layout, .jobs-details, .job-details-jobs-unified-top-card');
+                if (jobDetailsSection) {
+                    titleElement = jobDetailsSection.querySelector('h1');
+                }
+            }
+            
+            let companyElement = null;
+            const companySelectors = [
+                '.job-details-jobs-unified-top-card__company-name',
+                '.jobs-unified-top-card__company-name',
+                '.jobs-unified-top-card__subtitle-primary',
+                '.jobs-top-card__company-url',
+                '.jobs-details-top-card__company-info',
+                '[data-test-job-card-company-name]'
+            ];
+            
+            for (const selector of companySelectors) {
+                companyElement = document.querySelector(selector);
+                if (companyElement) break;
+            }
+            
+            let descriptionElement = null;
+            const descriptionSelectors = [
+                '.jobs-description__content',
+                '.jobs-description',
+                '.jobs-unified-top-card__description',
+                '.jobs-box__html-content',
+                '.jobs-details'
+            ];
+            
+            for (const selector of descriptionSelectors) {
+                descriptionElement = document.querySelector(selector);
+                if (descriptionElement) break;
+            }
             
             if (!titleElement || !companyElement) {
-                console.error('Could not find required job elements');
+                console.error('Could not find required job elements', { 
+                    titleFound: !!titleElement,
+                    companyFound: !!companyElement
+                });
+                alert('Could not find job details. Please try again on a LinkedIn job page.');
                 return;
             }
 
@@ -135,10 +188,23 @@ function createSaveButton() {
             const applyLink = await getApplicationUrl();
             console.log('Application URL:', applyLink);
             
+            // Clean the description by removing "About the job" prefix and cleaning up the text
+            let description = descriptionElement ? descriptionElement.textContent.trim() : '';
+            
+            // Remove "About the job" prefix with case insensitivity
+            description = description.replace(/^About the job\s*:?\s*/i, '');
+            
+            // Remove excessive whitespace and normalize line breaks
+            description = description.replace(/\s+/g, ' ');
+            
+            // Clean up common LinkedIn job description artifacts
+            description = description.replace(/Show more/g, '');
+            description = description.replace(/Show less/g, '');
+            
             const jobData = {
                 title: titleElement.textContent.trim(),
                 company: companyElement.textContent.trim(),
-                description: descriptionElement ? descriptionElement.textContent.trim() : '',
+                description: description,
                 apply_link: applyLink
             };
 
@@ -180,8 +246,38 @@ function createSaveButton() {
 }
 
 function insertSaveButton() {
-    // Find the job title container
-    const titleContainer = document.querySelector('.job-details-jobs-unified-top-card__job-title');
+    // Find the job title container with multiple possible selectors
+    const titleContainerSelectors = [
+        '.job-details-jobs-unified-top-card__job-title',
+        '.jobs-unified-top-card__job-title',
+        '.jobs-unified-top-card__title',
+        '.jobs-search__job-details--title',
+        '.jobs-details-top-card__title-container'
+    ];
+    
+    let titleContainer = null;
+    for (const selector of titleContainerSelectors) {
+        titleContainer = document.querySelector(selector);
+        if (titleContainer) {
+            console.log(`Found title container with selector: ${selector}`);
+            break;
+        }
+    }
+    
+    if (!titleContainer) {
+        // Try to find any container that contains the job title
+        const h1Elements = document.querySelectorAll('h1');
+        for (const h1 of h1Elements) {
+            // Check if this h1 is likely to be a job title (within a job details section)
+            const isInJobDetails = h1.closest('.jobs-unified-top-card, .job-view-layout, .jobs-details, .job-details-jobs-unified-top-card');
+            if (isInJobDetails) {
+                titleContainer = h1.parentElement;
+                console.log('Found title container via h1 element in job details');
+                break;
+            }
+        }
+    }
+    
     if (!titleContainer) {
         console.error('Could not find job title container');
         return;
@@ -198,15 +294,90 @@ function insertSaveButton() {
     titleContainer.appendChild(saveButton);
 }
 
+// Initialize the extension
+function initializeExtension() {
+    console.log('Resume Agent: Initializing on LinkedIn page', window.location.href);
+    
+    // Check if we're on a feed page that might show job postings
+    const isFeedPage = window.location.href.includes('linkedin.com/feed/');
+    
+    // Check if we're on a dedicated job page
+    const isJobPage = window.location.href.includes('linkedin.com/jobs/') || 
+                      window.location.href.includes('linkedin.com/job/') ||
+                      window.location.href.includes('/view/');
+    
+    if (!isJobPage && !isFeedPage) {
+        console.log('Resume Agent: Not a job or feed page, skipping initialization');
+        return;
+    }
+    
+    if (isFeedPage) {
+        console.log('Resume Agent: On feed page, looking for job posts');
+        // For feed pages, we need a different approach to find job posts
+        // Try to find job cards or job posts within the feed
+        setTimeout(() => {
+            const feedJobPosts = document.querySelectorAll('.feed-shared-update-v2__content');
+            if (feedJobPosts.length > 0) {
+                console.log(`Resume Agent: Found ${feedJobPosts.length} potential job posts in feed`);
+                // Process each post to see if it's a job post
+                feedJobPosts.forEach(post => {
+                    const jobTitleElement = post.querySelector('h3, .feed-shared-update-v2__description');
+                    if (jobTitleElement && jobTitleElement.textContent.includes('is hiring')) {
+                        console.log('Resume Agent: Found a job post in feed', jobTitleElement.textContent);
+                        // Add save button to this post
+                        if (!post.querySelector('button[data-purpose="save-job"]')) {
+                            const saveButton = createSaveButton();
+                            saveButton.setAttribute('data-purpose', 'save-job');
+                            
+                            // Find a good place to insert the button
+                            const actionBar = post.querySelector('.feed-shared-social-actions');
+                            if (actionBar) {
+                                actionBar.appendChild(saveButton);
+                                console.log('Resume Agent: Added save button to job post in feed');
+                            }
+                        }
+                    }
+                });
+            }
+        }, 2000); // Wait for feed to load
+    }
+    
+    if (isJobPage) {
+        console.log('Resume Agent: Detected job page, inserting save button');
+        
+        // Try a few times as the page might be loading dynamically
+        const maxAttempts = 5;
+        let attempts = 0;
+        
+        const tryInsertButton = () => {
+            attempts++;
+            console.log(`Resume Agent: Attempt ${attempts} to insert save button`);
+            insertSaveButton();
+            
+            if (attempts < maxAttempts) {
+                setTimeout(tryInsertButton, 1500);
+            }
+        };
+        
+        tryInsertButton();
+    }
+}
+
 // Initial insertion
-setTimeout(insertSaveButton, 1000);
+window.addEventListener('load', initializeExtension);
 
 // Watch for URL changes (LinkedIn uses client-side routing)
 let lastUrl = location.href;
-new MutationObserver(() => {
+const observer = new MutationObserver(() => {
     const url = location.href;
     if (url !== lastUrl) {
         lastUrl = url;
-        setTimeout(insertSaveButton, 1000);
+        console.log('Resume Agent: URL changed to', url);
+        setTimeout(initializeExtension, 1000);
     }
-}).observe(document, { subtree: true, childList: true });
+});
+
+// Start observing
+observer.observe(document, { subtree: true, childList: true });
+
+console.log('Resume Agent: Content script loaded');
