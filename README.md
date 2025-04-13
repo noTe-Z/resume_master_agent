@@ -52,13 +52,19 @@ pip install -r requirements.txt
 ANTHROPIC_API_KEY=your_api_key_here
 ```
 
-5. Run the backend server:
+5. Initialize the database (only needed on first run):
 ```bash
 cd backend
-flask run
+python -c "from app import init_db; init_db(); print('Database initialized successfully!')"
 ```
 
-The server will start on http://localhost:5000
+6. Run the backend server:
+```bash
+cd backend
+flask run --host=0.0.0.0 --port=3000
+```
+
+The server will start on http://localhost:3000 (port 3000 is required for the extension to work properly)
 
 ### Browser Extension Installation
 
