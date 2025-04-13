@@ -44,6 +44,7 @@ console_log.log
 LinkedIn.html
 test_jobs.db
 project-structure
+backend/.env
 
 # Cache/Logs/Config
 .pytest_cache/
