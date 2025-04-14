@@ -1,0 +1,58 @@
+JOHN DOE
+123 Main Street, San Francisco, CA 94105
+john.doe@example.com | (555) 123-4567
+linkedin.com/in/johndoe | github.com/johndoe
+
+SUMMARY
+Experienced software engineer with 5+ years of experience developing web applications and services. Proficient in Python, JavaScript, and cloud technologies. Passionate about creating efficient, scalable solutions to complex problems.
+
+EXPERIENCE
+Senior Software Engineer, Tech Solutions Inc, January 2020 - Present
+- Designed and implemented RESTful APIs using Django and Flask, improving system performance by 40%
+- Led a team of 4 developers in rebuilding the company's customer portal with React, reducing load times by 60%
+- Implemented CI/CD pipelines using GitHub Actions, decreasing deployment time from days to hours
+- Optimized database queries, resulting in a 30% reduction in API response times
+
+Software Engineer, Web Innovations LLC, June 2017 - December 2019
+- Developed responsive web applications using JavaScript, HTML, and CSS
+- Created backend services with Node.js and Express
+- Collaborated with UX designers to implement user-friendly interfaces
+- Maintained and improved legacy code, reducing bug reports by 25%
+
+Junior Developer, Startup Labs, March 2016 - May 2017
+- Assisted in the development of a mobile app using React Native
+- Wrote unit tests and performed code reviews
+- Participated in agile development processes, including daily standups and sprint planning
+
+EDUCATION
+Bachelor of Science in Computer Science, Stanford University, 2012-2016
+- GPA: 3.8/4.0
+- Dean's List, 7 semesters
+- Senior Project: Machine Learning for Image Recognition
+
+SKILLS
+Programming: Python, JavaScript, TypeScript, Java, C++
+Frameworks: React, Angular, Django, Flask, Express
+Databases: PostgreSQL, MongoDB, MySQL, Redis
+Cloud & DevOps: AWS, Docker, Kubernetes, CI/CD, GitHub Actions
+Other: RESTful APIs, GraphQL, Microservices, Agile Methodologies
+
+CERTIFICATIONS
+AWS Certified Developer - Associate, 2022
+Microsoft Certified: Azure Developer Associate, 2021
+Certified Scrum Master (CSM), 2019
+
+PROJECTS
+Personal Website (github.com/johndoe/personal-site)
+- Built with Next.js, Tailwind CSS, and Vercel
+- Features a blog, portfolio, and contact form
+
+Inventory Management System (github.com/johndoe/inventory-app)
+- Full-stack application using Django, React, and PostgreSQL
+- Implemented barcode scanning and real-time updates
+
+LANGUAGES
+English (Native), Spanish (Fluent), French (Basic)
+
+INTERESTS
+Rock climbing, photography, open source contributions, machine learning 

@@ -5,6 +5,10 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from datetime import datetime, date
 
+# Resume parser imports
+from backend.resume_parser.file_handler import save_resume_file
+from backend.resume_parser.interface import parse_resume, save_parsed_resume
+
 # Get the absolute path to the extension/popup directory
 STATIC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'extension', 'popup'))
 
@@ -351,6 +355,47 @@ def index():
 @app.route('/<path:path>')
 def serve_static(path):
     return send_from_directory(STATIC_DIR, path)
+
+# Resume parsing endpoint
+@app.route('/parse-resume', methods=['POST'])
+def parse_resume_endpoint():
+    try:
+        # Check if the post request has the file part
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
+            
+        file = request.files['file']
+        
+        # If user does not select file, browser might submit an empty file
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+            
+        # Save the uploaded file
+        success, message, file_path = save_resume_file(file)
+        
+        if not success:
+            return jsonify({'error': message}), 400
+            
+        # Parse the resume
+        resume_data = parse_resume(file_path)
+        
+        # Check for errors in parsing
+        if 'error' in resume_data:
+            return jsonify({'error': resume_data['error']}), 500
+            
+        # Save the parsed data for future reference
+        data_path = os.path.join(os.path.dirname(file_path), f"{os.path.splitext(os.path.basename(file_path))[0]}.json")
+        save_parsed_resume(resume_data, data_path)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Resume parsed successfully',
+            'data': resume_data
+        }), 200
+            
+    except Exception as e:
+        print(f"Error parsing resume: {e}")
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     init_db()

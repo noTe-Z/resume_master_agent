@@ -8,14 +8,32 @@ A complete system for streamlining your job application process with AI-powered 
 - **Job Tracking**: Save jobs, track application status, and set goals for daily applications
 - **AI Resume Tailoring**: Automatically generate custom-tailored resumes for each job based on the job description
 - **Application Dashboard**: View all saved jobs and their statuses in one place
+- **Resume Parser**: Advanced PDF resume parsing with section detection and structured data extraction
 
 ## Project Structure
 
-The project consists of three main components:
-
-1. **Backend Server**: Flask-based API for job storage and resume tailoring
-2. **Browser Extension**: Chrome extension for LinkedIn integration
-3. **Utility Tools**: Web scraping, search, and AI modules
+```
+resume_master_agent/
+├── backend/               # Flask backend server
+│   ├── app.py            # Main application file
+│   ├── database.py       # Database models and utilities
+│   ├── resume_parser/    # Resume parsing module
+│   └── api/              # API endpoints
+├── extension/            # Chrome extension
+│   ├── manifest.json     # Extension configuration
+│   ├── content.js        # LinkedIn page integration
+│   ├── background.js     # Background service worker
+│   └── popup/           # Extension UI components
+├── tools/               # Utility tools
+│   ├── llm_api.py       # LLM integration (Claude, GPT-4)
+│   ├── web_scraper.py   # Web scraping utilities
+│   └── search_engine.py # Search functionality
+├── tests/               # Test suite
+│   ├── resume_parser/   # Parser tests
+│   └── fixtures/        # Test data
+├── docs/                # Documentation
+└── data/                # Data storage
+```
 
 ## Installation and Setup
 
@@ -23,7 +41,10 @@ The project consists of three main components:
 
 - Python 3.8+
 - Chrome web browser
-- Anthropic API key (for Claude AI access)
+- API keys for:
+  - Anthropic Claude
+  - OpenAI (optional)
+  - Azure OpenAI (optional)
 
 ### Backend Setup
 
@@ -47,12 +68,13 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the `backend` directory with your API keys:
-```
-ANTHROPIC_API_KEY=your_api_key_here
+4. Copy the example environment file and update with your settings:
+```bash
+cp backend/.env.example backend/.env
+# Edit backend/.env with your API keys and configuration
 ```
 
-5. Initialize the database (only needed on first run):
+5. Initialize the database:
 ```bash
 cd backend
 python -c "from app import init_db; init_db(); print('Database initialized successfully!')"
@@ -64,62 +86,69 @@ cd backend
 flask run --host=0.0.0.0 --port=3000
 ```
 
-The server will start on http://localhost:3000 (port 3000 is required for the extension to work properly)
+The server will start on http://localhost:3000
 
 ### Browser Extension Installation
 
 1. Open Chrome and navigate to `chrome://extensions/`
 2. Enable "Developer mode" (toggle in the top right)
-3. Click "Load unpacked" and select the `extension` folder from this repository
-4. The LinkedIn Job Saver extension should now be installed and visible in your extensions toolbar
-
-## Usage
-
-### Saving Jobs from LinkedIn
-
-1. Browse job listings on LinkedIn
-2. When viewing a job you're interested in, click the extension icon in your browser toolbar
-3. Click "Save Job" to add it to your database
-
-### Managing Your Job Applications
-
-1. Click the extension icon and select "View Saved Jobs"
-2. You'll see a dashboard with all your saved jobs
-3. Update status to "Applied" or "Interviewing" as you progress
-4. Track your daily application goals
-
-### Generating Tailored Resumes
-
-1. From your jobs dashboard, select a saved job
-2. Click "Tailor Resume"
-3. The AI will generate a customized resume based on the job description
-4. Review and download the tailored resume
+3. Click "Load unpacked" and select the `extension` folder
+4. The extension should now appear in your browser toolbar
 
 ## Development
 
-### Project Components
+### Setting Up Development Environment
 
-- `backend/app.py`: Main Flask application with API endpoints
-- `backend/database.py`: Database connection and utilities
-- `extension/`: Chrome extension files
-  - `manifest.json`: Extension configuration
-  - `content.js`: LinkedIn page integration
-  - `background.js`: Background service worker
-  - `popup/`: UI components for the extension
-- `tools/`: Utility functions
-  - `llm_api.py`: Integration with Anthropic Claude API
-  - `web_scraper.py`: Web scraping utilities
-  - `search_engine.py`: Search functionality
+1. Install development dependencies:
+```bash
+pip install -r requirements-dev.txt
+```
+
+2. Install pre-commit hooks:
+```bash
+pre-commit install
+```
+
+### Code Style
+
+We follow PEP 8 guidelines and use type hints. Key points:
+- Use 4 spaces for indentation
+- Maximum line length of 88 characters (Black formatter)
+- Document functions and classes with docstrings
+- Add type hints to function parameters and return values
 
 ### Running Tests
 
-The project includes comprehensive test coverage:
+Run the full test suite:
+```bash
+python -m pytest
+```
+
+Run specific test categories:
+```bash
+python -m pytest tests/resume_parser  # Only parser tests
+python -m pytest tests/test_api.py    # Only API tests
+```
+
+### Database Migrations
+
+We use Flask-Migrate for database migrations:
 
 ```bash
-cd tests
-pytest
+flask db migrate -m "Description of changes"
+flask db upgrade
 ```
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
-MIT License - See LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Anthropic Claude](https://www.anthropic.com/claude) for AI capabilities
+- [LinkedIn](https://www.linkedin.com) for job data integration
+- All contributors who have helped shape this project
