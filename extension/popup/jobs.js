@@ -1,4 +1,192 @@
-document.addEventListener('DOMContentLoaded', loadJobs);
+document.addEventListener('DOMContentLoaded', () => {
+    // Load jobs on page load
+    loadJobs();
+    
+    // Set up resume upload functionality
+    setupResumeUpload();
+});
+
+// Resume upload and parsing functionality
+function setupResumeUpload() {
+    const uploadButton = document.getElementById('uploadResumeBtn');
+    const parseButton = document.getElementById('parseResumeBtn');
+    const fileInput = document.getElementById('resumeFileInput');
+    const fileNameSpan = document.getElementById('selectedFileName');
+    const modal = document.getElementById('parsedResumeModal');
+    const closeButton = modal.querySelector('.close');
+    const parsedContent = document.getElementById('parsedResumeContent');
+    
+    // Show file input when upload button is clicked
+    uploadButton.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    // Handle file selection
+    fileInput.addEventListener('change', (event) => {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            fileNameSpan.textContent = file.name;
+            parseButton.style.display = 'inline-block';
+        } else {
+            fileNameSpan.textContent = '';
+            parseButton.style.display = 'none';
+        }
+    });
+    
+    // Parse resume when parse button is clicked
+    parseButton.addEventListener('click', async () => {
+        if (fileInput.files.length === 0) {
+            alert('Please select a resume file first.');
+            return;
+        }
+        
+        const file = fileInput.files[0];
+        parseButton.disabled = true;
+        parseButton.textContent = 'Parsing...';
+        
+        try {
+            const parsedData = await parseResume(file);
+            displayParsedResume(parsedData);
+        } catch (error) {
+            console.error('Error parsing resume:', error);
+            alert('Failed to parse resume. Please try again.');
+        } finally {
+            parseButton.disabled = false;
+            parseButton.textContent = 'Parse Resume';
+        }
+    });
+    
+    // Close modal when close button is clicked
+    closeButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+// Function to parse the resume by sending it to the backend
+async function parseResume(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const response = await fetch('http://localhost:3000/parse-resume', {
+        method: 'POST',
+        body: formData
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to parse resume');
+    }
+    
+    return await response.json();
+}
+
+// Function to display the parsed resume in the modal
+function displayParsedResume(data) {
+    const modal = document.getElementById('parsedResumeModal');
+    const parsedContent = document.getElementById('parsedResumeContent');
+    
+    // Format the parsed content nicely
+    let formattedContent = '';
+    
+    // Contact Information
+    formattedContent += '=== CONTACT INFORMATION ===\n';
+    if (data.data.contact_info) {
+        for (const [key, value] of Object.entries(data.data.contact_info)) {
+            if (value) {
+                formattedContent += `${key.replace('_', ' ').toUpperCase()}: ${value}\n`;
+            }
+        }
+    } else {
+        formattedContent += 'No contact information found.\n';
+    }
+    
+    // Summary
+    formattedContent += '\n=== SUMMARY ===\n';
+    formattedContent += data.data.summary || 'No summary found.\n';
+    
+    // Work Experience
+    formattedContent += '\n=== WORK EXPERIENCE ===\n';
+    if (data.data.experiences && data.data.experiences.length > 0) {
+        data.data.experiences.forEach((exp, index) => {
+            formattedContent += `\n[Experience ${index + 1}]\n`;
+            formattedContent += `Company: ${exp.company || 'N/A'}\n`;
+            formattedContent += `Position: ${exp.position || 'N/A'}\n`;
+            if (exp.location) {
+                formattedContent += `Location: ${exp.location}\n`;
+            }
+            formattedContent += `Start Date: ${exp.start_date || 'N/A'}\n`;
+            formattedContent += `End Date: ${exp.end_date || 'N/A'}\n`;
+            
+            if (exp.responsibilities && exp.responsibilities.length > 0) {
+                formattedContent += '\nResponsibilities:\n';
+                exp.responsibilities.forEach(resp => {
+                    formattedContent += `  • ${resp}\n`;
+                });
+            }
+        });
+    } else {
+        formattedContent += 'No work experience found.\n';
+    }
+    
+    // Education
+    formattedContent += '\n=== EDUCATION ===\n';
+    if (data.data.education && data.data.education.length > 0) {
+        data.data.education.forEach((edu, index) => {
+            formattedContent += `\n[Education ${index + 1}]\n`;
+            formattedContent += `Degree: ${edu.degree || 'N/A'}\n`;
+            formattedContent += `Institution: ${edu.institution || 'N/A'}\n`;
+            formattedContent += `Start Date: ${edu.start_date || 'N/A'}\n`;
+            formattedContent += `End Date: ${edu.end_date || 'N/A'}\n`;
+            
+            if (edu.details && edu.details.length > 0) {
+                formattedContent += '\nDetails:\n';
+                edu.details.forEach(detail => {
+                    formattedContent += `  • ${detail}\n`;
+                });
+            }
+        });
+    } else {
+        formattedContent += 'No education found.\n';
+    }
+    
+    // Skills
+    formattedContent += '\n=== SKILLS ===\n';
+    if (data.data.skills) {
+        if (typeof data.data.skills === 'string') {
+            formattedContent += data.data.skills;
+        } else {
+            for (const [category, skills] of Object.entries(data.data.skills)) {
+                if (skills && skills.length > 0) {
+                    formattedContent += `\n${category.replace('_', ' ').toUpperCase()}:\n`;
+                    skills.forEach(skill => {
+                        formattedContent += `  • ${skill}\n`;
+                    });
+                }
+            }
+        }
+    } else {
+        formattedContent += 'No skills found.\n';
+    }
+    
+    // Certifications
+    if (data.data.certifications && data.data.certifications.length > 0) {
+        formattedContent += '\n=== CERTIFICATIONS ===\n';
+        data.data.certifications.forEach((cert, index) => {
+            formattedContent += `  ${index + 1}. ${cert}\n`;
+        });
+    }
+    
+    // Set the content and show the modal
+    parsedContent.textContent = formattedContent;
+    modal.style.display = 'block';
+}
 
 async function loadJobs() {
     try {
