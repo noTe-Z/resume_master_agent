@@ -49,4 +49,8 @@ backend/.env
 # Cache/Logs/Config
 .pytest_cache/
 logs/
-.devcontainer/ 
+.devcontainer/
+
+# Resume uploads and test data
+uploads/
+tests/resume_parser/test_data/ 

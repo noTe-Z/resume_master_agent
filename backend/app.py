@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 import sqlite3
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
@@ -360,20 +361,27 @@ def serve_static(path):
 @app.route('/parse-resume', methods=['POST'])
 def parse_resume_endpoint():
     try:
+        print("Received resume parsing request")
+        
         # Check if the post request has the file part
         if 'file' not in request.files:
+            print("No file part in the request")
             return jsonify({'error': 'No file part'}), 400
             
         file = request.files['file']
+        print(f"File received: {file.filename}, Content type: {file.content_type}")
         
         # If user does not select file, browser might submit an empty file
         if file.filename == '':
+            print("Empty filename")
             return jsonify({'error': 'No selected file'}), 400
             
         # Save the uploaded file
+        print(f"Saving file: {file.filename}")
         success, message, file_path = save_resume_file(file)
         
         if not success:
+            print(f"Failed to save file: {message}")
             return jsonify({'error': message}), 400
         
         print(f"Successfully saved resume file to {file_path}")
@@ -383,19 +391,17 @@ def parse_resume_endpoint():
         if file_path.lower().endswith('.pdf'):
             try:
                 print(f"Attempting to use enhanced parser for {file_path}")
-                # Import the enhanced_resume_parser from the root directory
-                sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-                
-                # Import the module
-                from enhanced_resume_parser import parse_resume as enhanced_parse
+                # Import the enhanced parser from the resume_parser module
+                from backend.resume_parser import enhanced_parse_resume
                 
                 # Parse with enhanced parser
                 print(f"Running enhanced parser on {file_path}")
-                resume_data = enhanced_parse(file_path)
+                resume_data = enhanced_parse_resume(file_path)
                 
                 # Check if any data was returned
                 if resume_data and isinstance(resume_data, dict) and 'contact_info' in resume_data:
                     print(f"Enhanced parser successful for {file_path}")
+                    print(f"Resume data keys: {resume_data.keys()}")
                     # Save the parsed data for future reference
                     data_path = os.path.join(os.path.dirname(file_path), f"{os.path.splitext(os.path.basename(file_path))[0]}.json")
                     save_parsed_resume(resume_data, data_path)
@@ -407,10 +413,14 @@ def parse_resume_endpoint():
                     }), 200
                 else:
                     print(f"Enhanced parser didn't return valid data for {file_path}")
+                    if resume_data and isinstance(resume_data, dict) and 'error' in resume_data:
+                        print(f"Parser error: {resume_data['error']}")
             except Exception as e:
                 print(f"Enhanced parser error: {str(e)}")
                 import traceback
                 traceback.print_exc()
+        else:
+            print(f"File {file_path} is not a PDF, skipping enhanced parser")
         
         # Fallback to the regular parser
         print(f"Using standard parser for {file_path}")
@@ -418,12 +428,14 @@ def parse_resume_endpoint():
         
         # Check for errors in parsing
         if 'error' in resume_data:
+            print(f"Standard parser error: {resume_data['error']}")
             return jsonify({'error': resume_data['error']}), 500
             
         # Save the parsed data for future reference
         data_path = os.path.join(os.path.dirname(file_path), f"{os.path.splitext(os.path.basename(file_path))[0]}.json")
         save_parsed_resume(resume_data, data_path)
         
+        print("Standard parser succeeded")
         return jsonify({
             'success': True,
             'message': 'Resume parsed successfully',
@@ -435,6 +447,121 @@ def parse_resume_endpoint():
         import traceback
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
+
+@app.route('/test-resume-parser', methods=['GET'])
+def test_resume_parser():
+    try:
+        # Get the absolute path to test PDF file
+        test_resume_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'example_resumes', 'test_resume.pdf'))
+        
+        # Check if file exists
+        if not os.path.exists(test_resume_path):
+            return jsonify({'error': 'Test resume file not found'}), 404
+        
+        # Import the enhanced parser from the resume_parser module
+        from backend.resume_parser import enhanced_parse_resume
+        
+        # Parse with enhanced parser
+        resume_data = enhanced_parse_resume(test_resume_path)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Resume parsed successfully with enhanced parser',
+            'data': resume_data
+        }), 200
+            
+    except Exception as e:
+        print(f"Error testing resume parser: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/test-upload-form')
+def test_upload_form():
+    return '''
+    <!doctype html>
+    <html>
+    <head>
+        <title>Resume Upload Test</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            #result {
+                margin-top: 20px;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                white-space: pre-wrap;
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Resume Upload Test</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="resume">Select a PDF resume:</label>
+                <input type="file" id="resume" name="file" accept=".pdf,.docx,.doc">
+            </div>
+            <button type="submit" class="button">Parse Resume</button>
+        </form>
+        <div id="result"></div>
+        
+        <script>
+            document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData();
+                const fileInput = document.getElementById('resume');
+                const resultDiv = document.getElementById('result');
+                
+                if (fileInput.files.length === 0) {
+                    alert('Please select a file first.');
+                    return;
+                }
+                
+                formData.append('file', fileInput.files[0]);
+                
+                try {
+                    resultDiv.innerHTML = 'Parsing resume...';
+                    resultDiv.style.display = 'block';
+                    
+                    const response = await fetch('/parse-resume', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        let formattedResult = JSON.stringify(data, null, 2);
+                        resultDiv.innerHTML = `<h3>Parsing Result:</h3><pre>${formattedResult}</pre>`;
+                    } else {
+                        resultDiv.innerHTML = `<h3>Error:</h3><p>${data.error || 'Unknown error'}</p>`;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `<h3>Error:</h3><p>${error.message || 'Failed to parse resume'}</p>`;
+                }
+            });
+        </script>
+    </body>
+    </html>
+    '''
 
 if __name__ == '__main__':
     init_db()
