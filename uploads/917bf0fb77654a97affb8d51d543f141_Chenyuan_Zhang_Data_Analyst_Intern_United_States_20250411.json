@@ -1,0 +1,220 @@
+{
+  "contact_info": {
+    "name": "Chenyuan Zhang",
+    "email": "zhang.chenyu@northeastern.edu",
+    "phone": "+1-857-891-7897",
+    "linkedin": "linkedin.com/in/chenyuan-zhang"
+  },
+  "summary": "Y\n\nData Analyst skilled in Python, R, ETL, and data visualization. Achieved improvements such as a 25% boost in GMV estimation accuracy \nand a 40% increase in report delivery efficiency through multiple internship projects. Adept at transforming complex data into actionable \ninsights and collaborating with cross-functional teams to drive data-driven digital solutions.",
+  "experiences": [
+    {
+      "company": "E",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "BigOne Lab | Data Analyst Intern",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Sep 2023 - May 2025",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Aug 2018 - Jun 2022",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Oct 2022 - Feb 2023",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Executed multi-platform brand performance analysis by processing scraped data from major marketplaces",
+      "position": "producing 5 Excel-based brand",
+      "responsibilities": []
+    },
+    {
+      "company": "performance reports that drove strategic client decisions.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Collaborated with the research team to build an ETL workflow for managing millions of product records",
+      "position": "incorporating anomaly detection",
+      "responsibilities": []
+    },
+    {
+      "company": "models and deploying 2 monitoring dashboards that improved GMV estimation accuracy by 25%.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Conducted a customized competitive analysis for a major brand",
+      "position": "evaluating key dimensions such as brand positioning, sales channels, and",
+      "responsibilities": []
+    },
+    {
+      "company": "trending products to deliver comprehensive market insights.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Leveraged AWS and PySpark to implement an automated system for generating 3 periodic analytical reports",
+      "position": "integrating Python libraries",
+      "responsibilities": []
+    },
+    {
+      "company": "for data processing and improving report delivery efficiency by 40%.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "CZ AI | Data Scientist Intern",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Mar 2023 - Jun 2023",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Developed a KPI system by engaging with industry leaders and analyzing market trends",
+      "position": "producing 18+ actionable reports that informed",
+      "responsibilities": []
+    },
+    {
+      "company": "strategic decisions.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Preprocessed and integrated 740",
+      "position": "000 textual data points across 5 categories using NLP techniques, establishing an ETL pipeline for",
+      "responsibilities": []
+    },
+    {
+      "company": "multi-source data integration and format standardization before storing the data in MySQL.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Optimized BI processes by designing 9 automated analytics templates with GPT API integration and deploying 3 interactive dashboards",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "enhancing decision-making efficiency by 70%.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "BUW Human Hair Factory Store | Data Analyst Intern",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "May 2021 - Jul 2021",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Streamlined e-commerce analysis by reengineering KPI structures using the AARRR framework and launching 3 Tableau dashboards that",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "covered 30% of routine data queries.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Led conversion rate optimization by analyzing user flows",
+      "position": "identifying critical 'add-to-cart' drop-off points, and proposing detail-page",
+      "responsibilities": []
+    },
+    {
+      "company": "enhancements validated via A/B testing.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Generated weekly Google Ads reports on ad spend and traffic trends",
+      "position": "providing data-driven insights to the C-suite and driving measurable",
+      "responsibilities": []
+    },
+    {
+      "company": "gains in overall ROI.",
+      "position": "",
+      "responsibilities": []
+    }
+  ],
+  "education": "N\n\nNortheastern University\nMaster of Science, Data Analytics Engineering (GPA: 4.0/4.0)\n\n\u2022 Coursework: Data Mining, Deterministic Operation Research, Database Management\n\nUniversity of Connecticut\nBachelor of Science, Applied Mathematics with Minor in Statistics",
+  "skills": "S\n\n\u2022 Programming Languages: SQL, R, SAS, Python, PySpark, SciPy, NumPy, Pandas, SciKit-Learn\n\u2022 Analytical Tools: AB Test, Excel, Tableau, ETL, Git, GitHub, AWS, Prompt Engineering, Machine Learning\n\u2022 Big Data & Cloud: Hadoop, Spark, Scala, C++, Microsoft Azure, Google Cloud, Cloud Computing, Big-data platforms",
+  "research": [
+    {
+      "title": "H",
+      "description": []
+    },
+    {
+      "title": "Medicine Allocation strategy for Opioid Epidemic in Massachusetts",
+      "institution": "Decision Analytics Lab",
+      "description": []
+    },
+    {
+      "title": "Oct 2024 - Apr 2025",
+      "description": []
+    },
+    {
+      "title": "\u2022 Designed models for optimal resource allocation to lower fatal overdoses under budget and accessibility constraints",
+      "description": [
+        "Created AI-powered research assistant tool, improving domain knowledge retrieval and research efficiency by 300%",
+        "Integrated multiple datasets (EMS, census, public health) to analyze seasonality, demographics, and administration patterns influencing"
+      ]
+    },
+    {
+      "title": "overdose outcomes and intervention opportunities",
+      "description": []
+    },
+    {
+      "title": "\u2022 Geocoded incident data to conduct geospatial analysis identifying overdose hotspots and high-risk locations",
+      "description": []
+    },
+    {
+      "title": "AB Test Integrated Boston Attractions site",
+      "description": []
+    },
+    {
+      "title": "Sep 2023 - Dec 2023",
+      "description": [
+        "Executed end-to-end database design for Boston Attractions Website, aimed at tourists, featuring a list of attractions and an interactive"
+      ]
+    },
+    {
+      "title": "dashboard for data display and insights.",
+      "description": []
+    },
+    {
+      "title": "\u2022 Implemented the database using MongoDB",
+      "description": [
+        "Led the A/B testing workflow, from defining success metrics and structuring test periods to validating hypotheses, refining user interaction"
+      ]
+    },
+    {
+      "title": "through data-driven insights.",
+      "description": []
+    }
+  ],
+  "raw_sections": {
+    "summary": "Y\n\nData Analyst skilled in Python, R, ETL, and data visualization. Achieved improvements such as a 25% boost in GMV estimation accuracy \nand a 40% increase in report delivery efficiency through multiple internship projects. Adept at transforming complex data into actionable \ninsights and collaborating with cross-functional teams to drive data-driven digital solutions.",
+    "education": "N\n\nNortheastern University\nMaster of Science, Data Analytics Engineering (GPA: 4.0/4.0)\n\n\u2022 Coursework: Data Mining, Deterministic Operation Research, Database Management\n\nUniversity of Connecticut\nBachelor of Science, Applied Mathematics with Minor in Statistics",
+    "experience": "E\n\nBigOne Lab | Data Analyst Intern\n\nSep 2023 - May 2025\n\nAug 2018 - Jun 2022\n\nOct 2022 - Feb 2023\n\n\u2022 Executed multi-platform brand performance analysis by processing scraped data from major marketplaces, producing 5 Excel-based brand \n\nperformance reports that drove strategic client decisions.\n\n\u2022 Collaborated with the research team to build an ETL workflow for managing millions of product records, incorporating anomaly detection \n\nmodels and deploying 2 monitoring dashboards that improved GMV estimation accuracy by 25%.\n\n\u2022 Conducted a customized competitive analysis for a major brand, evaluating key dimensions such as brand positioning, sales channels, and \n\ntrending products to deliver comprehensive market insights.\n\n\u2022 Leveraged AWS and PySpark to implement an automated system for generating 3 periodic analytical reports, integrating Python libraries \n\nfor data processing and improving report delivery efficiency by 40%.\n\nCZ AI | Data Scientist Intern\n\nMar 2023 - Jun 2023\n\n\u2022 Developed a KPI system by engaging with industry leaders and analyzing market trends, producing 18+ actionable reports that informed \n\nstrategic decisions.\n\n\u2022 Preprocessed and integrated 740,000 textual data points across 5 categories using NLP techniques, establishing an ETL pipeline for \n\nmulti-source data integration and format standardization before storing the data in MySQL.\n\n\u2022 Optimized BI processes by designing 9 automated analytics templates with GPT API integration and deploying 3 interactive dashboards, \n\nenhancing decision-making efficiency by 70%.\n\nBUW Human Hair Factory Store | Data Analyst Intern\n\nMay 2021 - Jul 2021\n\n\u2022 Streamlined e-commerce analysis by reengineering KPI structures using the AARRR framework and launching 3 Tableau dashboards that \n\ncovered 30% of routine data queries.\n\n\u2022 Led conversion rate optimization by analyzing user flows, identifying critical 'add-to-cart' drop-off points, and proposing detail-page \n\nenhancements validated via A/B testing.\n\n\u2022 Generated weekly Google Ads reports on ad spend and traffic trends, providing data-driven insights to the C-suite and driving measurable \n\ngains in overall ROI.",
+    "research": "H\n\nMedicine Allocation strategy for Opioid Epidemic in Massachusetts\nDecision Analytics Lab\n\nOct 2024 - Apr 2025\n\n\u2022 Designed models for optimal resource allocation to lower fatal overdoses under budget and accessibility constraints\n\u2022 Created AI-powered research assistant tool, improving domain knowledge retrieval and research efficiency by 300%\n\u2022 Integrated multiple datasets (EMS, census, public health) to analyze seasonality, demographics, and administration patterns influencing \n\noverdose outcomes and intervention opportunities\n\n\u2022 Geocoded incident data to conduct geospatial analysis identifying overdose hotspots and high-risk locations\n\nAB Test Integrated Boston Attractions site\n\nSep 2023 - Dec 2023\n\u2022 Executed end-to-end database design for Boston Attractions Website, aimed at tourists, featuring a list of attractions and an interactive \n\ndashboard for data display and insights.\n\n\u2022 Implemented the database using MongoDB, and integrated it with a web application using Flask.\n\u2022 Led the A/B testing workflow, from defining success metrics and structuring test periods to validating hypotheses, refining user interaction \n\nthrough data-driven insights.",
+    "skills": "S\n\n\u2022 Programming Languages: SQL, R, SAS, Python, PySpark, SciPy, NumPy, Pandas, SciKit-Learn\n\u2022 Analytical Tools: AB Test, Excel, Tableau, ETL, Git, GitHub, AWS, Prompt Engineering, Machine Learning\n\u2022 Big Data & Cloud: Hadoop, Spark, Scala, C++, Microsoft Azure, Google Cloud, Cloud Computing, Big-data platforms",
+    "header": "Chenyuan Zhang\n\n+1-857-891-7897\n\nzhang.chenyu@northeastern.edu\n\nhttps://linkedin.com/in/chenyuan-zhang"
+  }
+}

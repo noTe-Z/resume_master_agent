@@ -77,13 +77,17 @@ def identify_sections(text):
     
     for section, headers in section_headers.items():
         for header in headers:
-            # Look for section headers followed by a newline or colon
-            pattern = r'(^|\n)(' + re.escape(header) + r')[\s:]*(\n|$)'
-            match = re.search(pattern, text_lower)
+            # More flexible pattern matching to handle different styles of headers
+            pattern = r'(^|\n)(' + re.escape(header) + r')s?[\s:]*(\n|$)'
+            match = re.search(pattern, text_lower, re.IGNORECASE)
             if match:
                 start_pos = match.start()
-                # Store the actual matched header text from the original text
-                original_header = text[match.start(2):match.end(2)]
+                # Get the full line containing the header from the original text
+                header_line_start = text.rfind('\n', 0, match.start()) + 1 if text.rfind('\n', 0, match.start()) >= 0 else 0
+                header_line_end = text.find('\n', match.end())
+                if header_line_end == -1:
+                    header_line_end = len(text)
+                original_header = text[header_line_start:header_line_end].strip()
                 section_starts[section] = (start_pos, original_header)
                 break
     
@@ -99,8 +103,8 @@ def identify_sections(text):
         else:
             end_pos = len(text)
         
-        # Extract section content
-        header_pos = start_pos + len(header)
+        # Extract section content, starting from after the header
+        header_pos = text.find(header, start_pos) + len(header)
         section_text = text[header_pos:end_pos].strip()
         sections[section] = section_text
     
@@ -122,64 +126,115 @@ def extract_experiences(text):
         return []
     
     experiences = []
-    # Split text into possible experience entries based on common patterns
-    entries = re.split(r'\n\s*\n', text)
     
-    for entry in entries:
-        if not entry.strip():
-            continue
-        
+    # Clean up the text to handle PDF formatting quirks
+    text = re.sub(r'\n{3,}', '\n\n', text)  # Replace multiple newlines with double newline
+    
+    # Try to identify each job entry (company + position often appear together)
+    # Split text by double newlines or patterns like "2018 - 2022" which indicate date ranges
+    entries = re.split(r'\n\s*\n|(\d{4}\s*[-–—]\s*(?:\d{4}|Present|Current))', text)
+    entries = [e for e in entries if e and e.strip()]  # Remove empty entries
+    
+    # If we have at least a company name and some details
+    if len(entries) >= 2:
         experience = {}
+        current_field = 'company'  # Start with company field
         
-        # Try to extract company and position
-        company_position_match = re.search(r'^(.+?)(?:,|\n|$)(.*?)(?:\n|$)', entry.strip())
-        if company_position_match:
-            experience['company'] = company_position_match.group(1).strip()
-            experience['position'] = company_position_match.group(2).strip()
-        
-        # Extract dates (format: MM/YYYY - MM/YYYY or similar)
-        date_match = re.search(r'(\d{1,2}/\d{4}|\d{4})\s*[-–—]\s*(\d{1,2}/\d{4}|\d{4}|Present|Current)', entry)
-        if date_match:
-            experience['start_date'] = date_match.group(1)
-            experience['end_date'] = date_match.group(2)
-        else:
-            # Just years
-            date_match = re.search(r'(\d{4})\s*[-–—]\s*(\d{4}|Present|Current)', entry)
-            if date_match:
-                experience['start_date'] = date_match.group(1)
-                experience['end_date'] = date_match.group(2)
-        
-        # Extract location if present
-        location_match = re.search(r'([A-Z][a-z]+(?:[\s,]+[A-Z][a-z]+)*),\s*([A-Z]{2})', entry)
-        if location_match:
-            experience['location'] = f"{location_match.group(1)}, {location_match.group(2)}"
-        
-        # Extract responsibilities (bullet points or lines after company/position/dates)
-        lines = entry.split('\n')
-        responsibilities = []
-        capture_mode = False
-        
-        for line in lines:
-            line = line.strip()
-            # Skip empty lines
-            if not line:
-                continue
-                
-            # Skip company, position, and date lines
-            if (experience.get('company') and experience['company'] in line) or \
-               (experience.get('position') and experience['position'] in line) or \
-               (date_match and date_match.group(0) in line):
+        for i, entry in enumerate(entries):
+            entry = entry.strip()
+            
+            # Skip empty entries
+            if not entry:
                 continue
             
-            # If line starts with a bullet point or dash, or previous line was a responsibility, add it
-            if line.startswith('•') or line.startswith('-') or line.startswith('*') or capture_mode:
-                responsibility = line.lstrip('•-* ')
-                if responsibility:
-                    responsibilities.append(responsibility)
-                capture_mode = True
+            # Date range - indicates the transition from company/position to responsibilities
+            if re.match(r'\d{4}\s*[-–—]\s*(?:\d{4}|Present|Current)', entry):
+                # Parse date range
+                date_parts = re.search(r'(\d{4})\s*[-–—]\s*(\d{4}|Present|Current)', entry)
+                if date_parts:
+                    experience['start_date'] = date_parts.group(1)
+                    experience['end_date'] = date_parts.group(2)
+                current_field = 'responsibilities'
+                # Start collecting responsibilities
+                experience['responsibilities'] = []
+                
+            # Company and position often appear in the first entry
+            elif current_field == 'company':
+                # Try to extract company and position (usually separated by comma or newline)
+                company_position = re.split(r',|\n', entry, 1)
+                if len(company_position) > 1:
+                    experience['company'] = company_position[0].strip()
+                    experience['position'] = company_position[1].strip()
+                else:
+                    experience['company'] = entry
+                    experience['position'] = ""
+                
+                # If this is the last entry, we need to add the experience
+                if i == len(entries) - 1:
+                    experiences.append(experience)
+                
+            # Responsibilities are usually bullet points or separate lines
+            elif current_field == 'responsibilities':
+                # Check if this is a bullet point or a new line
+                if entry.startswith('-') or entry.startswith('•') or entry.startswith('*'):
+                    responsibility = entry.lstrip('-•* ').strip()
+                    experience['responsibilities'].append(responsibility)
+                else:
+                    # Multiple responsibilities might be separated by newlines
+                    items = [item.strip() for item in entry.split('\n') if item.strip()]
+                    for item in items:
+                        # If it looks like a bullet point
+                        if item.startswith('-') or item.startswith('•') or item.startswith('*'):
+                            responsibility = item.lstrip('-•* ').strip()
+                        else:
+                            responsibility = item
+                        experience['responsibilities'].append(responsibility)
+                
+                # If this is the last entry or the next entry looks like a new company
+                if i == len(entries) - 1:
+                    experiences.append(experience)
+                    experience = {}
+                    current_field = 'company'
+    
+    # If the above approach didn't work, try a simpler approach
+    if not experiences:
+        # Remove excess spacing
+        text = re.sub(r'\n\s*\n', '\n\n', text)
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
         
-        experience['responsibilities'] = responsibilities
-        experiences.append(experience)
+        current_experience = None
+        
+        for line in lines:
+            # If line contains company/position pattern (usually has comma or colon)
+            if re.search(r'[A-Z][a-zA-Z]+.*[,:].*[A-Z][a-zA-Z]+', line) and not current_experience:
+                current_experience = {'company': '', 'position': '', 'responsibilities': []}
+                parts = line.split(',', 1)
+                if len(parts) > 1:
+                    current_experience['company'] = parts[0].strip()
+                    current_experience['position'] = parts[1].strip()
+                else:
+                    current_experience['company'] = line
+            
+            # If line contains a date range (YYYY - YYYY)
+            elif re.search(r'\d{4}\s*[-–—]\s*(?:\d{4}|Present|Current)', line) and current_experience:
+                date_match = re.search(r'(\d{4})\s*[-–—]\s*(\d{4}|Present|Current)', line)
+                if date_match:
+                    current_experience['start_date'] = date_match.group(1)
+                    current_experience['end_date'] = date_match.group(2)
+            
+            # If line starts with a bullet point, it's likely a responsibility
+            elif (line.startswith('-') or line.startswith('•') or line.startswith('*')) and current_experience:
+                responsibility = line.lstrip('-•* ').strip()
+                current_experience['responsibilities'].append(responsibility)
+            
+            # If we see what looks like a new company name, save the current experience and start a new one
+            elif re.match(r'^[A-Z][a-zA-Z\s&]+$', line) and current_experience and current_experience.get('company'):
+                experiences.append(current_experience)
+                current_experience = {'company': line, 'position': '', 'responsibilities': []}
+        
+        # Don't forget to add the last experience
+        if current_experience and current_experience.get('company'):
+            experiences.append(current_experience)
     
     return experiences
 
@@ -253,37 +308,43 @@ def extract_research(text):
 
 def parse_resume(file_path):
     """Parse a resume file and extract structured information."""
-    # Extract text from PDF
-    text = extract_text(file_path)
-    
-    # Identify sections in the resume
-    sections = identify_sections(text)
-    
-    # Extract contact information from the header
-    contact_info = extract_contact_info(sections.get('header', '') or text[:500])
-    
-    # Extract experiences from the experience section
-    experiences = extract_experiences(sections.get('experience', ''))
-    
-    # Extract research information
-    research = extract_research(sections.get('research', ''))
-    
-    # If no research section was found, try looking in the projects section
-    if not research and 'projects' in sections:
-        research = extract_research(sections.get('projects', ''))
-    
-    # Combine all parsed data
-    resume_data = {
-        'contact_info': contact_info,
-        'summary': sections.get('summary', ''),
-        'experiences': experiences,
-        'education': sections.get('education', ''),
-        'skills': sections.get('skills', ''),
-        'research': research,
-        'raw_sections': sections
-    }
-    
-    return resume_data
+    try:
+        # Extract text from PDF
+        text = extract_text(file_path)
+        
+        # Identify sections in the resume
+        sections = identify_sections(text)
+        
+        # Extract contact information from the header
+        contact_info = extract_contact_info(sections.get('header', '') or text[:500])
+        
+        # Extract experiences from the experience section
+        experiences = extract_experiences(sections.get('experience', ''))
+        
+        # Extract research information
+        research = extract_research(sections.get('research', ''))
+        
+        # If no research section was found, try looking in the projects section
+        if not research and 'projects' in sections:
+            research = extract_research(sections.get('projects', ''))
+        
+        # Combine all parsed data
+        resume_data = {
+            'contact_info': contact_info,
+            'summary': sections.get('summary', ''),
+            'experiences': experiences,
+            'education': sections.get('education', ''),
+            'skills': sections.get('skills', ''),
+            'research': research,
+            'raw_sections': sections
+        }
+        
+        return resume_data
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"Error in enhanced resume parser: {str(e)}")
+        return {'error': str(e)}
 
 def print_contact_info(contact_info):
     """Print contact information in a readable format."""
@@ -362,9 +423,9 @@ def print_raw_text(text, section_name):
 
 def main():
     """Main entry point for the script."""
-    args = parse_args()
-    
     try:
+        args = parse_args()
+        
         # Check if file exists
         if not os.path.exists(args.file_path):
             print(f"Error: File not found: {args.file_path}")
@@ -373,6 +434,11 @@ def main():
         # Parse resume
         print(f"Parsing resume: {args.file_path}")
         resume_data = parse_resume(args.file_path)
+        
+        # Check for parsing errors
+        if 'error' in resume_data:
+            print(f"Error parsing resume: {resume_data['error']}")
+            sys.exit(1)
         
         # Print sections
         print_contact_info(resume_data.get('contact_info', {}))
@@ -393,6 +459,8 @@ def main():
                 print_raw_text(section_text, section_name)
         
         print("\nResume parsing completed successfully!")
+        
+        return resume_data
         
     except Exception as e:
         print(f"Error: {str(e)}")

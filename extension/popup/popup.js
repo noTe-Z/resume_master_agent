@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await updateDailyGoal();
     
     try {
-        const response = await fetch('http://localhost:3000/get-jobs');
+        const response = await fetch('/get-jobs');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             button.addEventListener('click', async () => {
                 try {
                     const jobId = button.dataset.jobId;
-                    const response = await fetch(`http://localhost:3000/delete-job/${jobId}`, {
+                    const response = await fetch(`/delete-job/${jobId}`, {
                         method: 'DELETE'
                     });
                     
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function updateDailyGoal() {
     try {
-        const response = await fetch('http://localhost:3000/jobs/today-stats');
+        const response = await fetch('/jobs/today-stats');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

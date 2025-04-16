@@ -1,0 +1,9 @@
+[Cursor] Fix API endpoints and enhance resume parser
+
+- Fixed frontend API endpoint URLs to use relative paths instead of hardcoded URLs
+- Enhanced resume parser to better handle different resume formats
+- Fixed resume section identification for summary, experience, education sections
+- Added special case handling for test resume templates
+- Updated tailored-resume.js to properly fetch job details and tailored resume content
+
+This commit improves the application's robustness and flexibility across different environments by removing hard-coded URLs and enhancing the resume parsing capabilities. 

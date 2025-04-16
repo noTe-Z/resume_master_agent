@@ -375,8 +375,45 @@ def parse_resume_endpoint():
         
         if not success:
             return jsonify({'error': message}), 400
+        
+        print(f"Successfully saved resume file to {file_path}")
             
         # Parse the resume
+        # First try the enhanced parser if the file is PDF
+        if file_path.lower().endswith('.pdf'):
+            try:
+                print(f"Attempting to use enhanced parser for {file_path}")
+                # Import the enhanced_resume_parser from the root directory
+                sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                
+                # Import the module
+                from enhanced_resume_parser import parse_resume as enhanced_parse
+                
+                # Parse with enhanced parser
+                print(f"Running enhanced parser on {file_path}")
+                resume_data = enhanced_parse(file_path)
+                
+                # Check if any data was returned
+                if resume_data and isinstance(resume_data, dict) and 'contact_info' in resume_data:
+                    print(f"Enhanced parser successful for {file_path}")
+                    # Save the parsed data for future reference
+                    data_path = os.path.join(os.path.dirname(file_path), f"{os.path.splitext(os.path.basename(file_path))[0]}.json")
+                    save_parsed_resume(resume_data, data_path)
+                    
+                    return jsonify({
+                        'success': True,
+                        'message': 'Resume parsed successfully with enhanced parser',
+                        'data': resume_data
+                    }), 200
+                else:
+                    print(f"Enhanced parser didn't return valid data for {file_path}")
+            except Exception as e:
+                print(f"Enhanced parser error: {str(e)}")
+                import traceback
+                traceback.print_exc()
+        
+        # Fallback to the regular parser
+        print(f"Using standard parser for {file_path}")
         resume_data = parse_resume(file_path)
         
         # Check for errors in parsing
@@ -395,6 +432,8 @@ def parse_resume_endpoint():
             
     except Exception as e:
         print(f"Error parsing resume: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':

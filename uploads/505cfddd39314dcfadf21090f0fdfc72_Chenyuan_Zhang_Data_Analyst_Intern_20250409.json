@@ -1,0 +1,219 @@
+{
+  "contact_info": {
+    "name": "Chenyuan Zhang",
+    "email": "zhang.chenyu@northeastern.edu",
+    "phone": "+1-857-891-7897",
+    "linkedin": "linkedin.com/in/chenyuan-zhang"
+  },
+  "summary": "Y\n\nData Analyst with hands-on experience in healthcare claim data processing, specializing in automating workflows and optimizing ETL \npipelines. Skilled in Python, SQL, and Excel, with a proven track record of improving reporting efficiency and data accuracy in claims \noperations. Known for strong analytical skills and attention to detail.",
+  "experiences": [
+    {
+      "company": "E",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "BigOne Lab | Data Analyst Intern",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Sep 2023 - May 2025",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Aug 2018 - Jun 2022",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Oct 2022 - Feb 2023",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Executed multi-platform brand performance analysis by processing scraped data and producing 5 detailed Excel-based brand performance",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "reports",
+      "position": "ensuring data accuracy and driving strategic client decisions.",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Collaborated with the research team to construct an ETL workflow for handling millions of product records",
+      "position": "integrating anomaly detection",
+      "responsibilities": []
+    },
+    {
+      "company": "and developing 2 monitoring dashboards that boosted GMV estimation accuracy by 25%.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Conducted a tailored competitive analysis for a major brand by evaluating key dimensions such as brand positioning",
+      "position": "sales channels, and",
+      "responsibilities": []
+    },
+    {
+      "company": "product trends to deliver comprehensive market insights.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Utilized Python alongside AWS and PySpark to develop an automated system for generating 3 periodic analytical reports",
+      "position": "enhancing",
+      "responsibilities": []
+    },
+    {
+      "company": "delivery efficiency by 40%.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "CZ AI | Data Scientist Intern",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "Mar 2023 - Jun 2023",
+      "position": "\u2022 Collaborated with industry leaders to design and implement a KPI system from the ground up, resulting in 18+ actionable reports that",
+      "responsibilities": []
+    },
+    {
+      "company": "captured market trends and informed strategic decisions.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Preprocessed and integrated 740",
+      "position": "000 textual data entries across 5 categories using NLP techniques, developing an ETL pipeline for",
+      "responsibilities": []
+    },
+    {
+      "company": "multi-source data integration and format standardization before storage in MySQL",
+      "position": "thereby demonstrating proficiency in SQL.",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Optimized business intelligence processes by creating 9 automated analytics templates with GPT API integration and working cross-func-",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "tionally to deploy 3 interactive dashboards",
+      "position": "improving decision-making efficiency by 70%.",
+      "responsibilities": []
+    },
+    {
+      "company": "BUW Human Hair Factory Store | Data Analyst Intern",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "May 2021 - Jul 2021",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Streamlined e-commerce analysis using the AARRR framework",
+      "position": "reengineered KPI structures, and launched over three Tableau dashboards",
+      "responsibilities": []
+    },
+    {
+      "company": "to monitor daily performance",
+      "position": "addressing 30% of routine data queries.",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Analyzed user flows to identify a significant 'add-to-cart' drop-off",
+      "position": "and proposed detail-page optimizations validated through A/B testing",
+      "responsibilities": []
+    },
+    {
+      "company": "to enhance conversion rates.",
+      "position": "",
+      "responsibilities": []
+    },
+    {
+      "company": "\u2022 Developed weekly Google Ads reports on ad spend and traffic trends",
+      "position": "furnishing key insights that informed C-suite decisions and drove",
+      "responsibilities": []
+    },
+    {
+      "company": "measurable improvements in ROI.",
+      "position": "",
+      "responsibilities": []
+    }
+  ],
+  "education": "N\n\nNortheastern University\nMaster of Science, Data Analytics Engineering (GPA: 3.82/4.0)\n\n\u2022 Coursework: Data Mining, Deterministic Operation Research, Database Management\n\nUniversity of Connecticut\nBachelor of Science, Applied Mathematics with Minor in Statistics",
+  "skills": "S\n\n\u2022 Programming Languages: SQL, R, SAS, Python, PySpark, SciPy, NumPy, Pandas, SciKit-Learn\n\u2022 Analytical Tools: AB Test, Excel, Tableau, ETL, Git, GitHub, AWS, Prompt Engineering, Machine Learning\n\u2022 Additional Expertise: Azure Services, Health Insurance Claims",
+  "research": [
+    {
+      "title": "H",
+      "description": []
+    },
+    {
+      "title": "Retention Analysis and Inference for MOUD Treatment | Decision Analytics Lab",
+      "description": []
+    },
+    {
+      "title": "Jan 2024 - Apr 2025",
+      "description": []
+    },
+    {
+      "title": "\u2022 Conducted literature review and full data handling",
+      "description": []
+    },
+    {
+      "title": "Treatment Retention of Opioid Use Disorder.",
+      "description": []
+    },
+    {
+      "title": "\u2022 Utilized causal inference and machine learning techniques to identify factors influencing treatment retention",
+      "description": []
+    },
+    {
+      "title": "matching to mitigate bias from confounding variables.",
+      "description": []
+    },
+    {
+      "title": "\u2022 Developed and tested a deep learning forecasting model to forecast treatment discontinuations to enhance healthcare decision-making.",
+      "description": []
+    },
+    {
+      "title": "Auto Insurance Risk Assessment Model on Claim Data",
+      "description": []
+    },
+    {
+      "title": "May 2022 - Jul 2022",
+      "description": []
+    },
+    {
+      "title": "\u2022 Developed a predictive model with a dataset of 600",
+      "description": []
+    },
+    {
+      "title": "profits.",
+      "description": []
+    },
+    {
+      "title": "\u2022 Leveraged data preprocessing techninques like under-sampling to overcome class imbalance and feature engineering to ensure model",
+      "description": []
+    },
+    {
+      "title": "robustness.",
+      "description": []
+    }
+  ],
+  "raw_sections": {
+    "summary": "Y\n\nData Analyst with hands-on experience in healthcare claim data processing, specializing in automating workflows and optimizing ETL \npipelines. Skilled in Python, SQL, and Excel, with a proven track record of improving reporting efficiency and data accuracy in claims \noperations. Known for strong analytical skills and attention to detail.",
+    "education": "N\n\nNortheastern University\nMaster of Science, Data Analytics Engineering (GPA: 3.82/4.0)\n\n\u2022 Coursework: Data Mining, Deterministic Operation Research, Database Management\n\nUniversity of Connecticut\nBachelor of Science, Applied Mathematics with Minor in Statistics",
+    "experience": "E\n\nBigOne Lab | Data Analyst Intern\n\nSep 2023 - May 2025\n\nAug 2018 - Jun 2022\n\nOct 2022 - Feb 2023\n\n\u2022 Executed multi-platform brand performance analysis by processing scraped data and producing 5 detailed Excel-based brand performance \n\nreports, ensuring data accuracy and driving strategic client decisions.\n\n\u2022 Collaborated with the research team to construct an ETL workflow for handling millions of product records, integrating anomaly detection \n\nand developing 2 monitoring dashboards that boosted GMV estimation accuracy by 25%.\n\n\u2022 Conducted a tailored competitive analysis for a major brand by evaluating key dimensions such as brand positioning, sales channels, and \n\nproduct trends to deliver comprehensive market insights.\n\n\u2022 Utilized Python alongside AWS and PySpark to develop an automated system for generating 3 periodic analytical reports, enhancing \n\ndelivery efficiency by 40%.\n\nCZ AI | Data Scientist Intern\n\nMar 2023 - Jun 2023\n\u2022 Collaborated with industry leaders to design and implement a KPI system from the ground up, resulting in 18+ actionable reports that \n\ncaptured market trends and informed strategic decisions.\n\n\u2022 Preprocessed and integrated 740,000 textual data entries across 5 categories using NLP techniques, developing an ETL pipeline for \n\nmulti-source data integration and format standardization before storage in MySQL, thereby demonstrating proficiency in SQL.\n\n\u2022 Optimized business intelligence processes by creating 9 automated analytics templates with GPT API integration and working cross-func-\n\ntionally to deploy 3 interactive dashboards, improving decision-making efficiency by 70%.\n\nBUW Human Hair Factory Store | Data Analyst Intern\n\nMay 2021 - Jul 2021\n\n\u2022 Streamlined e-commerce analysis using the AARRR framework, reengineered KPI structures, and launched over three Tableau dashboards \n\nto monitor daily performance, addressing 30% of routine data queries.\n\n\u2022 Analyzed user flows to identify a significant 'add-to-cart' drop-off, and proposed detail-page optimizations validated through A/B testing \n\nto enhance conversion rates.\n\n\u2022 Developed weekly Google Ads reports on ad spend and traffic trends, furnishing key insights that informed C-suite decisions and drove \n\nmeasurable improvements in ROI.",
+    "research": "H\n\nRetention Analysis and Inference for MOUD Treatment | Decision Analytics Lab\n\nJan 2024 - Apr 2025\n\n\u2022 Conducted literature review and full data handling, from initial extraction to exploratory analysis and feature selection, for researches on \n\nTreatment Retention of Opioid Use Disorder.\n\n\u2022 Utilized causal inference and machine learning techniques to identify factors influencing treatment retention, applying propensity score \n\nmatching to mitigate bias from confounding variables.\n\n\u2022 Developed and tested a deep learning forecasting model to forecast treatment discontinuations to enhance healthcare decision-making.\n\nAuto Insurance Risk Assessment Model on Claim Data\n\nMay 2022 - Jul 2022\n\n\u2022 Developed a predictive model with a dataset of 600,000 samples to improve auto insurance claim prediction accuracy and boost company \n\nprofits.\n\n\u2022 Leveraged data preprocessing techninques like under-sampling to overcome class imbalance and feature engineering to ensure model \n\nrobustness.",
+    "skills": "S\n\n\u2022 Programming Languages: SQL, R, SAS, Python, PySpark, SciPy, NumPy, Pandas, SciKit-Learn\n\u2022 Analytical Tools: AB Test, Excel, Tableau, ETL, Git, GitHub, AWS, Prompt Engineering, Machine Learning\n\u2022 Additional Expertise: Azure Services, Health Insurance Claims",
+    "header": "Chenyuan Zhang\n\nNortheastern University(Boston, MA)\n\n+1-857-891-7897\n\nzhang.chenyu@northeastern.edu\n\nhttps://linkedin.com/in/chenyuan-zhang"
+  }
+}

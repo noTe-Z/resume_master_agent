@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Saved Jobs</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://localhost:3000; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="jobs.css">
     <style>
@@ -46,6 +46,33 @@
             text-align: left;
             white-space: pre-wrap;
         }
+        
+        .parser-info {
+            margin-bottom: 15px;
+        }
+        
+        .parser-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .parser-badge.enhanced {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .parser-badge.standard {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .button.primary {
+            background-color: #4CAF50;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -56,8 +83,11 @@
         <div class="resume-upload-section">
             <input type="file" id="resumeFileInput" accept=".pdf,.docx,.doc" style="display: none;">
             <button id="uploadResumeBtn" class="button">Upload Resume</button>
-            <button id="parseResumeBtn" class="button" style="display: none;">Parse Resume</button>
+            <button id="parseResumeBtn" class="button primary" style="display: none;">Parse Resume</button>
             <span id="selectedFileName"></span>
+            <div class="upload-instructions" style="font-size: 0.8em; margin-top: 5px; color: #666;">
+                Upload a PDF resume for best parsing results. The enhanced parser works best with PDF files.
+            </div>
         </div>
         
         <div class="stats-container">
@@ -106,6 +136,9 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Parsed Resume Content</h2>
+            <div class="parser-info">
+                <span id="parserType" class="parser-badge"></span>
+            </div>
             <div id="parsedResumeContent" class="parsed-resume-content">
                 <!-- Parsed resume content will be displayed here -->
             </div>

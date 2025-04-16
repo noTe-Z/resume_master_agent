@@ -211,7 +211,7 @@ function createSaveButton() {
             console.log('Sending job data:', jobData);
             
             // Save job
-            const response = await fetch('http://localhost:3000/save-job', {
+            const response = await fetch('/save-job', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

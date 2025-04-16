@@ -14,14 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadJobAndResume(jobId) {
     try {
         // Load job details
-        const jobResponse = await fetch(`http://localhost:3000/jobs/${jobId}`);
+        const jobResponse = await fetch(`/jobs/${jobId}`);
         if (!jobResponse.ok) {
             throw new Error(`HTTP error! status: ${jobResponse.status}`);
         }
         const job = await jobResponse.json();
         
         // Load tailored resume
-        const resumeResponse = await fetch(`http://localhost:3000/jobs/${jobId}/tailored-resume`);
+        const resumeResponse = await fetch(`/jobs/${jobId}/tailored-resume`);
         if (!resumeResponse.ok) {
             throw new Error(`HTTP error! status: ${resumeResponse.status}`);
         }
