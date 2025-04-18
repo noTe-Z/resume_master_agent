@@ -73,11 +73,43 @@
             background-color: #4CAF50;
             color: white;
         }
+
+        /* Navigation buttons style */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .nav-button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .nav-button.resume {
+            background-color: #0a66c2;
+            color: white;
+        }
+
+        .nav-button.resume:hover {
+            background-color: #004182;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Saved Jobs</h1>
+        
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <button id="resumeEditorBtn" class="nav-button resume">Resume Editor</button>
+        </div>
         
         <!-- Resume Upload Section -->
         <div class="resume-upload-section">

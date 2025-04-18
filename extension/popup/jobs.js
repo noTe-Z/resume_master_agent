@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Set up resume upload functionality
     setupResumeUpload();
+
+    // Add Resume Editor button event listener
+    const resumeEditorBtn = document.getElementById('resumeEditorBtn');
+    if (resumeEditorBtn) {
+        resumeEditorBtn.addEventListener('click', function() {
+            window.location.href = '/resume-editor';
+        });
+    }
 });
 
 // Resume upload and parsing functionality

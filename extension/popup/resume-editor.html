@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Editor</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="jobs.css">
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .back-button {
+            background-color: #0a66c2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        
+        .back-button:hover {
+            background-color: #004182;
+        }
+
+        .editor-container {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .resume-preview {
+            flex: 6;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 40px;
+            min-height: 800px;
+            overflow-y: auto;
+        }
+        
+        .editor-panel {
+            flex: 4;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            height: 800px;
+            overflow-y: auto;
+        }
+        
+        .section-editor {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        .section-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+        }
+        
+        .icon-button:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-control:focus {
+            border-color: #0a66c2;
+            outline: none;
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .add-item-button {
+            background-color: #f3f2ef;
+            color: #0a66c2;
+            border: 1px dashed #0a66c2;
+            border-radius: 4px;
+            padding: 8px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .add-item-button:hover {
+            background-color: #edf3f8;
+        }
+        
+        .experience-item,
+        .education-item {
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .experience-item:last-child,
+        .education-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .delete-item {
+            color: #d11124;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            float: right;
+        }
+        
+        .delete-item:hover {
+            text-decoration: underline;
+        }
+        
+        /* Resume Preview Styles */
+        .resume {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .resume h1 {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #000;
+            font-size: 24px;
+        }
+        
+        .resume .contact-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .resume .section {
+            margin-bottom: 20px;
+        }
+        
+        .resume .section-heading {
+            font-size: 16px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .resume .experience-entry,
+        .resume .education-entry {
+            margin-bottom: 15px;
+        }
+        
+        .resume .entry-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .resume .entry-position,
+        .resume .entry-degree {
+            font-style: italic;
+        }
+
+        .resume .entry-description {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        /* Note message styles */
+        .note-message {
+            background-color: #FEF1F1;
+            border: 1px solid #E57373;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .note-icon {
+            color: #E57373;
+            font-weight: bold;
+        }
+
+        .note-content {
+            flex: 1;
+        }
+
+        .note-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #C62828;
+        }
+
+        .edit-base-button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .edit-base-button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-button" id="backToAnalysis">← Back to Analysis</button>
+        
+        <div class="note-message">
+            <div class="note-icon">📝</div>
+            <div class="note-content">
+                <div class="note-title">Note: Changes made here apply only to this resume.</div>
+                <div>For major updates, like adjusting sections or editing experiences, update your Base Resume to affect future resumes.</div>
+                <button class="edit-base-button" id="editBaseResume">Edit Base Resume</button>
+            </div>
+        </div>
+        
+        <div class="editor-container">
+            <!-- Live Resume Preview (Left Side) -->
+            <div class="resume-preview">
+                <div class="resume">
+                    <h1 id="preview-name">Your Name</h1>
+                    <div class="contact-info" id="preview-contact">
+                        Email: your.email@example.com | Phone: (123) 456-7890 | LinkedIn: linkedin.com/in/yourname
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-heading">SUMMARY</div>
+                        <div id="preview-summary">
+                            Your professional summary will appear here...
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-heading">EDUCATION</div>
+                        <div id="preview-education">
+                            <!-- Education entries will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-heading">WORK EXPERIENCE</div>
+                        <div id="preview-experience">
+                            <!-- Experience entries will be generated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Editor Panel (Right Side) -->
+            <div class="editor-panel">
+                <!-- Personal Info Section -->
+                <div class="section-editor">
+                    <div class="section-header">
+                        <h3 class="section-title">Personal Info</h3>
+                        <div class="section-actions">
+                            <button class="icon-button" title="Edit">
+                                <span>✏️</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="input-name">Full Name</label>
+                        <input type="text" id="input-name" class="form-control" placeholder="Your full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="input-email">Email</label>
+                        <input type="email" id="input-email" class="form-control" placeholder="your.email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="input-phone">Phone</label>
+                        <input type="tel" id="input-phone" class="form-control" placeholder="(123) 456-7890">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="input-linkedin">LinkedIn</label>
+                        <input type="text" id="input-linkedin" class="form-control" placeholder="linkedin.com/in/yourname">
+                    </div>
+                </div>
+                
+                <!-- Summary Section -->
+                <div class="section-editor">
+                    <div class="section-header">
+                        <h3 class="section-title">Summary</h3>
+                        <div class="section-actions">
+                            <button class="icon-button" title="Edit">
+                                <span>✏️</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="input-summary">Professional Summary</label>
+                        <textarea id="input-summary" class="form-control" placeholder="Write a brief summary of your professional background and skills..."></textarea>
+                    </div>
+                </div>
+                
+                <!-- Education Section -->
+                <div class="section-editor">
+                    <div class="section-header">
+                        <h3 class="section-title">Education</h3>
+                        <div class="section-actions">
+                            <button class="icon-button" title="Edit">
+                                <span>✏️</span>
+                            </button>
+                            <button class="icon-button" title="Delete">
+                                <span>🗑️</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="education-items">
+                        <!-- Education form items will be added here -->
+                    </div>
+                    
+                    <button id="add-education" class="add-item-button">+ Add Education</button>
+                </div>
+                
+                <!-- Work Experience Section -->
+                <div class="section-editor">
+                    <div class="section-header">
+                        <h3 class="section-title">Work Experience</h3>
+                        <div class="section-actions">
+                            <button class="icon-button" title="Edit">
+                                <span>✏️</span>
+                            </button>
+                            <button class="icon-button" title="Delete">
+                                <span>🗑️</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="experience-items">
+                        <!-- Experience form items will be added here -->
+                    </div>
+                    
+                    <button id="add-experience" class="add-item-button">+ Add Experience</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="resume-editor.js"></script>
+</body>
+</html> 

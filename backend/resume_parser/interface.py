@@ -8,9 +8,9 @@ import os
 import logging
 from typing import Dict, Any, Optional
 
-from backend.resume_parser.file_handler import get_file_extension
-from backend.resume_parser.parser import parse_resume_pdf
-from backend.resume_parser.docx_parser import parse_resume_docx
+from resume_parser.file_handler import get_file_extension
+from resume_parser.parser import parse_resume_pdf
+from resume_parser.docx_parser import parse_resume_docx
 
 # Initialize logger
 logging.basicConfig(level=logging.INFO)

@@ -61,7 +61,7 @@ def parse_resume_docx(docx_path: str) -> Dict[str, Any]:
     """
     try:
         # Import here to avoid circular imports
-        from backend.resume_parser.parser import (
+        from resume_parser.parser import (
             normalize_text, identify_sections, extract_contact_info,
             parse_experience_section, parse_education_section,
             parse_skills_section, extract_certifications

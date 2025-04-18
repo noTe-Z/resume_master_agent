@@ -7,8 +7,8 @@ from flask_cors import CORS
 from datetime import datetime, date
 
 # Resume parser imports
-from backend.resume_parser.file_handler import save_resume_file
-from backend.resume_parser.interface import parse_resume, save_parsed_resume
+from resume_parser.file_handler import save_resume_file
+from resume_parser.interface import parse_resume, save_parsed_resume
 
 # Get the absolute path to the extension/popup directory
 STATIC_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'extension', 'popup'))
@@ -353,6 +353,10 @@ def get_job(job_id):
 def index():
     return send_from_directory(STATIC_DIR, 'jobs.html')
 
+@app.route('/resume-editor')
+def resume_editor():
+    return send_from_directory(STATIC_DIR, 'resume-editor.html')
+
 @app.route('/<path:path>')
 def serve_static(path):
     return send_from_directory(STATIC_DIR, path)
@@ -392,7 +396,7 @@ def parse_resume_endpoint():
             try:
                 print(f"Attempting to use enhanced parser for {file_path}")
                 # Import the enhanced parser from the resume_parser module
-                from backend.resume_parser import enhanced_parse_resume
+                from resume_parser import enhanced_parse_resume
                 
                 # Parse with enhanced parser
                 print(f"Running enhanced parser on {file_path}")
@@ -459,7 +463,7 @@ def test_resume_parser():
             return jsonify({'error': 'Test resume file not found'}), 404
         
         # Import the enhanced parser from the resume_parser module
-        from backend.resume_parser import enhanced_parse_resume
+        from resume_parser import enhanced_parse_resume
         
         # Parse with enhanced parser
         resume_data = enhanced_parse_resume(test_resume_path)
@@ -565,4 +569,4 @@ def test_upload_form():
 
 if __name__ == '__main__':
     init_db()
-    app.run(port=3000) 
+    app.run(port=5000) 
